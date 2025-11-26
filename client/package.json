@@ -5,7 +5,8 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "vite build",
+  "vercel-build": "npm rebuild lightningcss --build-from-source || true && npm run build",
+  "build": "vite build",
     "lint": "eslint .",
     "preview": "vite preview"
   },
