@@ -5,12 +5,10 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "vercel-build": "npm rebuild lightningcss --build-from-source || true && npm run build",
+    
     "build": "vite build",
     "lint": "eslint .",
     "preview": "vite preview"
-      
-
   },
   "dependencies": {
     "react": "^19.2.0",
@@ -25,7 +23,11 @@
     "eslint-plugin-react-hooks": "^7.0.1",
     "eslint-plugin-react-refresh": "^0.4.24",
     "globals": "^16.5.0",
-   
     "vite": "^7.2.4"
+  },
+  "optionalDependencies": {
+    "lightningcss-linux-arm64-musl": "^1.30.2",
+    "lightningcss-linux-x64-gnu": "^1.30.2",
+    "lightningcss-linux-x64-musl": "^1.30.2"
   }
 }
