@@ -8,8 +8,8 @@
     "vercel-build": "npm rebuild lightningcss --build-from-source || true && npm run build",
     "build": "vite build",
     "lint": "eslint .",
-    "preview": "vite preview",
-      "postinstall": "node ./scripts/use-lightningcss-wasm.js || true"
+    "preview": "vite preview"
+      
 
   },
   "dependencies": {
@@ -25,7 +25,7 @@
     "eslint-plugin-react-hooks": "^7.0.1",
     "eslint-plugin-react-refresh": "^0.4.24",
     "globals": "^16.5.0",
-    "lightningcss-wasm": "^1.30.2",
+   
     "vite": "^7.2.4"
   }
 }
