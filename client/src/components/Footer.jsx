@@ -4,7 +4,7 @@ import { FiMail, FiPhone, FiMapPin } from 'react-icons/fi'
 
 export default function Footer() {
   return (
-    <footer className="footer-deep py-10 sm:py-14 md:py-16 mt-20">
+    <footer className="footer-deep  sm:py-14 md:py-16 ">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-12">
 
         {/* TOP GRID */}

@@ -108,7 +108,7 @@ export default function About() {
 
           <a
             href="tel:9036773900"
-            className="inline-flex w-full sm:w-auto justify-center items-center gap-2 bg-accent text-white font-semibold px-6 py-3 rounded-lg shadow-md hover:bg-[#c74c4b] transition"
+            className="inline-flex w-full sm:w-auto justify-center items-center gap-2 bg-accent text-white font-semibold px-6 py-3 rounded-lg shadow-md bg-[#c74c4b] transition"
             aria-label="Call 9036773900"
           >
             <FiMail size={18} />

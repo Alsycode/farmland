@@ -1,0 +1,43 @@
+{
+  "hero": {
+    "titleLine1": "Find Your",
+    "titleAccent": "Ideal",
+    "titleLine2": "Property With Us",
+    "subtitle": "Discover a seamless journey in finding your ideal farmland projects with our expert guidance and innovative tools.",
+    "ctaExplore": "Explore all Properties",
+    "ctaNearMe": "Farmland Near Me",
+    "searchPlaceholder": "Search city, project, or keyword..."
+  },
+  "featured": {
+    "heading": "Featured",
+    "viewMore": "View more"
+  },
+  "trending": {
+    "heading": "Trending",
+    "promoTitle": "Ad / Promo",
+    "promoSubtitle": "Most affordable premium villa at Sarjapura"
+  },
+  "navbar": {
+    "brand": "MYFARMLAND.CO",
+    "tagline": "Connecting Generations",
+    "links": {
+      "home": "Home",
+      "blog": "Blog",
+      "about": "About",
+      "contact": "Contact",
+      "post": "Post Your Property"
+    },
+    "login": "Login",
+    "exploreStay": "Explore FarmStay",
+    "openMenu": "Open navigation menu",
+    "closeMenu": "Close navigation menu"
+  },
+  "footer": {
+    "brand": "MyFarmland.co",
+    "followUs": "Follow us on",
+    "contactPhone": "+91 9036773900",
+    "contactEmail": "myfarmland6@gmail.com",
+    "address": "NO. 56/1, Handenahalli road, Sollepura village, Handenahalli Panchayath, Bengaluru, Bengaluru Urban, Karnataka, 562125",
+    "copyright": "© {year} MyFarmland.co • All rights reserved."
+  }
+}

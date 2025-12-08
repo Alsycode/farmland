@@ -60,3 +60,21 @@ body {
   box-shadow: 0 2px 6px rgba(2,6,23,0.08);
   border: 1px solid rgba(2,6,23,0.06);
 }
+:root {
+  --bg: #F6F7FB;
+  --text: #0F1724;
+  --muted: #6B7280;
+  --primary: #0B61FF;
+  --accent: #00C2A8;
+}
+
+/* When Tailwind toggles the class 'dark' on <html>, this ensures variables change */
+.dark {
+  --bg: #0f1724;
+  --text: #F8FAFC;
+  --muted: #9CA3AF;
+  --primary: #60a5fa; /* optional lighter tint for dark */
+}
+
+/* optional: small helper used if any non-tailwind components need them */
+.theme-bg { background-color: var(--bg); color: var(--text); }
