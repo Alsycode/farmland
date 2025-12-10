@@ -1,0 +1,21 @@
+// frontend/src/styles/theme.css
+/* Purpose: Theme variables (used across the admin UI). 
+   Note: These values were substituted from the uploaded screenshot earlier.
+*/
+:root{
+  --brand-primary: #1E6F4A;
+  --brand-secondary: #AEE6C2;
+  --bg: #F6F8FA;
+  --card-bg: #FFFFFF;
+  --accent: #8A6AF1;
+  --text: #24313A;
+
+  --sidebar-width: 260px;
+  --header-height: 64px;
+  --card-radius: 12px;
+}
+
+/* page & base */
+*{box-sizing:border-box}
+body{font-family:Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial; margin:0; background:var(--bg); color:var(--text)}
+a{color:inherit}

@@ -1,0 +1,201 @@
+
+openapi: 3.0.1
+info:
+  title: Farmland Property API
+  version: "1.0.0"
+  description: OpenAPI docs for property listing endpoints (PART 4)
+servers:
+  - url: http://localhost:4000
+paths:
+  /properties:
+    get:
+      summary: List properties with filters, pagination, search & geo
+      parameters:
+        - in: query
+          name: q
+          schema: { type: string }
+          description: Text search query
+        - in: query
+          name: page
+          schema: { type: integer, default: 1 }
+        - in: query
+          name: limit
+          schema: { type: integer, default: 12 }
+        - in: query
+          name: sort
+          schema: { type: string, enum: [price_asc,price_desc,newest,oldest] }
+        - in: query
+          name: lat
+          schema: { type: number }
+        - in: query
+          name: lng
+          schema: { type: number }
+        - in: query
+          name: radiusKm
+          schema: { type: number }
+      responses:
+        '200':
+          description: property list response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  ok: { type: boolean }
+                  meta: { type: object }
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Property'
+    post:
+      summary: Create property (admin)
+      security:
+        - cookieAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PropertyCreate'
+      responses:
+        '201':
+          description: created
+  /properties/{id}:
+    get:
+      summary: Get property by id
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema: { type: string }
+      responses:
+        '200':
+          description: property
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  ok: { type: boolean }
+                  data: { $ref: '#/components/schemas/Property' }
+    put:
+      summary: Update property (admin)
+      security:
+        - cookieAuth: []
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema: { type: string }
+      requestBody:
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/PropertyUpdate' }
+      responses:
+        '200': { description: updated }
+    delete:
+      summary: Delete property (admin)
+      security:
+        - cookieAuth: []
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema: { type: string }
+      responses:
+        '200': { description: deleted }
+  /properties/{id}/upload:
+    post:
+      summary: Upload media (images/videos) for a property (admin)
+      security:
+        - cookieAuth: []
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema: { type: string }
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                files:
+                  type: array
+                  items:
+                    type: string
+                    format: binary
+      responses:
+        '200':
+          description: uploaded
+components:
+  securitySchemes:
+    cookieAuth:
+      type: apiKey
+      in: cookie
+      name: refreshToken
+  schemas:
+    Property:
+      type: object
+      properties:
+        _id: { type: string }
+        title: { type: string }
+        slug: { type: string }
+        description: { type: string }
+        pricePerAcre: { type: number }
+        area: { type: number }
+        address: { type: string }
+        location:
+          type: object
+          properties:
+            type: { type: string }
+            coordinates:
+              type: array
+              items: { type: number }
+        images:
+          type: array
+          items: { type: string }
+        amenities:
+          type: array
+          items: { type: string }
+        status: { type: string }
+        isAvailable: { type: boolean }
+        createdAt: { type: string, format: date-time }
+    PropertyCreate:
+      type: object
+      required: [title, pricePerAcre, area, description]
+      properties:
+        title: { type: string }
+        slug: { type: string }
+        description: { type: string }
+        pricePerAcre: { type: number }
+        area: { type: number }
+        address: { type: string }
+        location:
+          type: object
+          properties:
+            type: { type: string }
+            coordinates:
+              type: array
+              items: { type: number }
+        amenities:
+          type: array
+          items: { type: string }
+    PropertyUpdate:
+      type: object
+      properties:
+        title: { type: string }
+        description: { type: string }
+        pricePerAcre: { type: number }
+        area: { type: number }
+        address: { type: string }
+        location:
+          type: object
+          properties:
+            type: { type: string }
+            coordinates:
+              type: array
+              items: { type: number }
+        amenities:
+          type: array
+          items: { type: string }

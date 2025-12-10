@@ -1,0 +1,26 @@
+// backend/docker-compose.yml
+version: "3.8"
+services:
+  mongo:
+    image: mongo:6
+    container_name: farmland_mongo
+    restart: unless-stopped
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo_data:/data/db
+
+  backend:
+    build: .
+    container_name: farmland_backend
+    env_file: .env.example
+    depends_on:
+      - mongo
+    ports:
+      - "4000:4000"
+    volumes:
+      - ./:/app
+      - ./backend/uploads:/app/uploads
+
+volumes:
+  mongo_data:

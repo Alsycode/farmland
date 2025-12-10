@@ -1,0 +1,7 @@
+// frontend/src/index.css
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* small helper */
+.container { max-width: 1100px; margin: 0 auto; }
