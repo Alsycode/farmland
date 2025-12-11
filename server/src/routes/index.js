@@ -7,6 +7,9 @@ const healthController = require('../controllers/healthController');
 // Health check
 router.get('/healthz', healthController.health);
 
+// Docs (OpenAPI UI)
+router.use('/docs', require('./docsRoutes'));
+
 // Auth routes
 router.use('/auth', require('./authRoutes'));
 
@@ -28,6 +31,9 @@ router.use('/admin', require('./adminRoutes'));
 // Analytics (manager & admin)
 router.use('/analytics', require('./analyticsRoutes'));
 
-// Mount future feature routers here (uploads, docs, etc.)
+// Uploads (if not mounted elsewhere)
+router.use('/uploads', require('./uploadRoutes'));
+
+// Mount future feature routers here
 
 module.exports = router;

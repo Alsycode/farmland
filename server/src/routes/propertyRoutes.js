@@ -8,7 +8,22 @@ const { body, param, query } = require('express-validator');
 const asyncHandler = require('../middleware/asyncHandler');
 const { validate } = require('../middleware/validation');
 const { authenticate, requireRole } = require('../middleware/authMiddleware');
-const propertyController = require('../controllers/propertyController');
+const { 
+  createProperty, 
+  getProperty, 
+  listProperties, 
+  updateProperty, 
+  deleteProperty, 
+  deleteImage 
+} = require('../controllers/propertyController');
+console.log('Property controllers:', {
+  createProperty: !!createProperty,
+  getProperty: !!getProperty,
+  listProperties: !!listProperties,
+  updateProperty: !!updateProperty,
+  deleteProperty: !!deleteProperty,
+  deleteImage: !!deleteImage
+});
 
 const router = express.Router();
 
@@ -52,14 +67,14 @@ router.post(
     validate
   ],
   upload.array('images', 6),
-  asyncHandler(propertyController.createProperty)
+  asyncHandler(createProperty)
 );
 
 // Get property by id (public)
 router.get(
   '/:id',
   [ param('id').isMongoId().withMessage('Invalid property id'), validate ],
-  asyncHandler(propertyController.getProperty)
+  asyncHandler(getProperty)
 );
 
 // List properties (public, with filters)
@@ -72,7 +87,7 @@ router.get(
     query('maxPrice').optional().isNumeric(),
     validate
   ],
-  asyncHandler(propertyController.listProperties)
+  asyncHandler(listProperties)
 );
 
 // Update property (owner or manager/admin)
@@ -87,7 +102,7 @@ router.put(
     validate
   ],
   upload.array('images', 6),
-  asyncHandler(propertyController.updateProperty)
+  asyncHandler(updateProperty)
 );
 
 // Delete property (owner or manager/admin)
@@ -95,7 +110,7 @@ router.delete(
   '/:id',
   authenticate,
   [ param('id').isMongoId().withMessage('Invalid property id'), validate ],
-  asyncHandler(propertyController.deleteProperty)
+  asyncHandler(deleteProperty)
 );
 
 // Delete single image from property
@@ -103,7 +118,7 @@ router.delete(
   '/:id/images/:filename',
   authenticate,
   [ param('id').isMongoId().withMessage('Invalid property id'), validate ],
-  asyncHandler(propertyController.deleteImage)
+  asyncHandler(deleteImage)
 );
 
 /**

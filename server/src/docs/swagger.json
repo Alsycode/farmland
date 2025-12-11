@@ -1,0 +1,216 @@
+
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "Farmland Listings API",
+    "version": "1.0.0",
+    "description": "OpenAPI spec for Farmland / Property Listing backend (representative endpoints). Generated as PART 9/12."
+  },
+  "servers": [
+    {
+      "url": "http://localhost:{port}/api",
+      "description": "Local dev server",
+      "variables": {
+        "port": {
+          "default": "4000"
+        }
+      }
+    }
+  ],
+  "components": {
+    "securitySchemes": {
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
+      },
+      "cookieAuth": {
+        "type": "apiKey",
+        "in": "cookie",
+        "name": "accessToken"
+      }
+    },
+    "schemas": {
+      "User": {
+        "type": "object",
+        "properties": {
+          "_id": { "type": "string" },
+          "name": { "type": "string" },
+          "email": { "type": "string" },
+          "role": { "type": "string", "enum": ["user","manager","admin"] },
+          "isActive": { "type": "boolean" },
+          "createdAt": { "type": "string", "format": "date-time" }
+        }
+      },
+      "AuthResponse": {
+        "type": "object",
+        "properties": {
+          "ok": { "type": "boolean" },
+          "message": { "type": "string" },
+          "accessToken": { "type": "string" },
+          "user": { "$ref": "#/components/schemas/User" }
+        }
+      },
+      "Property": {
+        "type": "object",
+        "properties": {
+          "_id": { "type": "string" },
+          "title": { "type": "string" },
+          "description": { "type": "string" },
+          "price": { "type": "number" },
+          "address": { "type": "string" },
+          "status": { "type": "string", "enum": ["draft","published","archived"] },
+          "images": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "url": { "type": "string" },
+                "filename": { "type": "string" }
+              }
+            }
+          },
+          "owner": { "$ref": "#/components/schemas/User" },
+          "createdAt": { "type": "string", "format": "date-time" }
+        }
+      },
+      "Error": {
+        "type": "object",
+        "properties": {
+          "ok": { "type": "boolean" },
+          "error": { "type": "string" }
+        }
+      }
+    }
+  },
+  "security": [
+    { "bearerAuth": [] }
+  ],
+  "paths": {
+    "/auth/register": {
+      "post": {
+        "summary": "Register user",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "name": { "type": "string" },
+                  "email": { "type": "string", "format": "email" },
+                  "password": { "type": "string", "format": "password" },
+                  "role": { "type": "string", "enum": ["user","manager","admin"] }
+                },
+                "required": ["name","email","password"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": { "description": "Created", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/AuthResponse" } } } },
+          "409": { "description": "Conflict", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Error" } } } }
+        }
+      }
+    },
+    "/auth/login": {
+      "post": {
+        "summary": "Login",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": { "email": { "type": "string" }, "password": { "type": "string" } },
+                "required": ["email","password"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": { "description": "OK", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/AuthResponse" } } } },
+          "401": { "description": "Unauthorized", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Error" } } } }
+        }
+      }
+    },
+    "/auth/me": {
+      "get": {
+        "summary": "Get current user",
+        "security": [{ "bearerAuth": [] }, { "cookieAuth": [] }],
+        "responses": {
+          "200": { "description": "OK", "content": { "application/json": { "schema": { "type":"object", "properties": { "ok": { "type":"boolean" }, "user": { "$ref":"#/components/schemas/User" } } } } } },
+          "401": { "description": "Unauthorized", "content": { "application/json": { "schema": { "$ref":"#/components/schemas/Error" } } } }
+        }
+      }
+    },
+    "/properties": {
+      "get": {
+        "summary": "List properties",
+        "parameters": [
+          { "name":"page", "in":"query", "schema":{"type":"integer","default":1} },
+          { "name":"limit", "in":"query", "schema":{"type":"integer","default":12} },
+          { "name":"q", "in":"query", "schema":{"type":"string"} }
+        ],
+        "responses": {
+          "200": { "description":"OK", "content": { "application/json": { "schema": { "type":"object","properties": { "ok": {"type":"boolean"}, "meta": {"type":"object"}, "items": { "type":"array", "items": { "$ref":"#/components/schemas/Property" } } } } } } }
+        }
+      },
+      "post": {
+        "summary": "Create property (authenticated)",
+        "security": [{ "bearerAuth": [] }],
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "title": { "type": "string" },
+                  "description": { "type": "string" },
+                  "price": { "type": "number" },
+                  "address": { "type": "string" },
+                  "images": { "type": "array", "items": { "type": "string", "format": "binary" } }
+                },
+                "required": ["title","description","price","address"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": { "description": "Created", "content": { "application/json": { "schema": { "type":"object", "properties": { "ok": { "type":"boolean" }, "property": { "$ref":"#/components/schemas/Property" } } } } } },
+          "401": { "description":"Unauthorized", "content": { "application/json": { "schema": { "$ref":"#/components/schemas/Error" } } } }
+        }
+      }
+    },
+    "/properties/{id}": {
+      "get": {
+        "summary": "Get property by id",
+        "parameters": [{ "name":"id","in":"path","required":true,"schema":{"type":"string"}}],
+        "responses": { "200": { "description":"OK", "content": { "application/json": { "schema": { "type":"object", "properties": { "ok": {"type":"boolean"}, "property": { "$ref":"#/components/schemas/Property" } } } } } } }
+      }
+    },
+    "/uploads/file": {
+      "post": {
+        "summary": "Upload single file (authenticated)",
+        "security": [{ "bearerAuth": [] }],
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type":"object",
+                "properties": {
+                  "file": { "type":"string", "format":"binary" }
+                },
+                "required": ["file"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": { "description":"Uploaded", "content": { "application/json": { "schema": { "type":"object", "properties": { "ok": { "type":"boolean" }, "files": { "type":"array" } } } } } },
+          "400": { "description":"Bad Request", "content": { "application/json": { "schema": { "$ref":"#/components/schemas/Error" } } } }
+        }
+      }
+    }
+  }
+}
