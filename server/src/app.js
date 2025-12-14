@@ -20,7 +20,7 @@ const { createRateLimiter } = require('./middleware/rateLimiter');
 const { errorHandler, notFoundHandler } = require('./middleware/errorHandler');
 
 const routes = require('./routes');
-
+const blogRoutes = require('./routes/blogRoutes');
 function createApp() {
   const app = express();
 
@@ -30,9 +30,18 @@ function createApp() {
   // Security
   app.use(helmet());
 
-  // CORS
-  app.use(cors({ origin: true, credentials: true }));
-
+  // // CORS
+  // app.use(cors({ origin: true, credentials: true }));
+app.use(cors({
+  origin: [
+    'http://localhost:5173',
+     'http://localhost:5174',      // Vite dev server
+    'http://127.0.0.1:5173',     // same for IPv4 localhost
+    'http://localhost:3000',     // common React dev port (fallback)
+  ],
+  credentials: true,
+  optionsSuccessStatus: 200
+}));
   // Logging
   app.use(requestLogger);
 
@@ -50,7 +59,7 @@ function createApp() {
 
   // API routes
   app.use('/api', routes);
-
+app.use('/api/blogs', blogRoutes);
   // Root redirect
   app.get('/', (req, res) => res.redirect('/api/healthz'));
 

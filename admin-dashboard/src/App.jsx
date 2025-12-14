@@ -10,7 +10,7 @@ import PropertyForm from './pages/PropertyForm';
 import Bookings from './pages/Bookings';
 import Favorites from './pages/Favorites';
 import Messages from './pages/Messages';
-import Users from './pages/User';
+import Users from './pages/Users';
 import Analytics from './pages/Analytics';
 import NotFound from './pages/NotFound';
 

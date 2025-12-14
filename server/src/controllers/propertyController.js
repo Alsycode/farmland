@@ -73,6 +73,7 @@ exports.getProperty = async (req, res, next) => {
   try {
     const { id } = req.params;
     const property = await Property.findById(id).populate('owner', 'name email role').lean();
+    console.log("xxxxxxxxx",property)
     if (!property) return res.status(404).json({ ok: false, error: 'Property not found' });
 
     // Optionally increment views asynchronously (fire-and-forget)
@@ -133,7 +134,7 @@ exports.listProperties = async (req, res, next) => {
       query.exec(),
       Property.countDocuments(filters)
     ]);
-
+console.log("itemsssss",items)
     return res.json({
       ok: true,
       meta: { page: pageNum, perPage, total, totalPages: Math.ceil(total / perPage) },
