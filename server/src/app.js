@@ -21,6 +21,7 @@ const { errorHandler, notFoundHandler } = require('./middleware/errorHandler');
 
 const routes = require('./routes');
 const blogRoutes = require('./routes/blogRoutes');
+const propertyRoutes = require("./routes/propertyRoutes") 
 function createApp() {
   const app = express();
 
@@ -34,8 +35,9 @@ function createApp() {
   // app.use(cors({ origin: true, credentials: true }));
 app.use(cors({
   origin: [
-    'http://localhost:5173',
-     'http://localhost:5174',      // Vite dev server
+   
+     'http://localhost:5174',  
+      'http://localhost:5175',    // Vite dev server
     'http://127.0.0.1:5173',     // same for IPv4 localhost
     'http://localhost:3000',     // common React dev port (fallback)
   ],
@@ -60,6 +62,7 @@ app.use(cors({
   // API routes
   app.use('/api', routes);
 app.use('/api/blogs', blogRoutes);
+app.use('/api/properties', propertyRoutes);
   // Root redirect
   app.get('/', (req, res) => res.redirect('/api/healthz'));
 

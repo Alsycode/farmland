@@ -3,10 +3,6 @@ import React from 'react';
 import { NavLink } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 
-/**
- * Sidebar supports mobile (overlay) and desktop usage.
- * onLinkClick is used to close mobile sidebar after navigation.
- */
 export default function Sidebar({ onLinkClick }) {
   const { user } = useAuth();
 
@@ -30,24 +26,46 @@ export default function Sidebar({ onLinkClick }) {
   else if (user?.role === 'manager') links.push(...managerLinks);
 
   return (
-    <aside className="h-full w-64 bg-white border-r shadow-sm flex flex-col">
-      <div className="p-4 border-b flex items-center justify-between">
-        <h2 className="text-lg font-semibold">Farmland Admin</h2>
+    <aside
+      className="
+        h-full w-64 flex flex-col
+        bg-[#181b20]
+        shadow-[6px_0_12px_#14161a,-6px_0_12px_#242a32]
+        text-gray-200
+      "
+    >
+      {/* Header */}
+      <div className="p-6">
+        <h2 className="text-lg font-semibold tracking-wide">
+          Farmland Admin
+        </h2>
       </div>
-      <nav className="p-4 flex-1 overflow-y-auto">
-        <ul className="space-y-2">
+
+      {/* Navigation */}
+      <nav className="px-4 flex-1 overflow-y-auto">
+        <ul className="space-y-3">
           {links.map((l) => (
             <li key={l.to}>
               <NavLink
                 to={l.to}
-                className={({ isActive }) =>
-                  `block px-3 py-2 rounded text-sm ${
-                    isActive
-                      ? 'bg-indigo-50 text-indigo-700'
-                      : 'text-gray-700 hover:bg-gray-100'
-                  }`
-                }
                 onClick={onLinkClick}
+                className={({ isActive }) =>
+                  `
+                  block px-4 py-2 rounded-xl text-sm transition-all
+                  ${
+                    isActive
+                      ? `
+                        text-amber-400
+                        shadow-[inset_4px_4px_8px_#14161a,inset_-4px_-4px_8px_#242a32]
+                      `
+                      : `
+                        text-gray-300
+                        shadow-[4px_4px_8px_#14161a,-4px_-4px_8px_#242a32]
+                        hover:text-gray-100
+                      `
+                  }
+                  `
+                }
               >
                 {l.label}
               </NavLink>

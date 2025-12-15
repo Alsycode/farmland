@@ -3,16 +3,6 @@ import React, { useEffect, useState } from 'react';
 import adminService from '../services/adminService';
 import { useAuth } from '../context/AuthContext';
 
-/**
- * Users admin page:
- * - Fetches /api/admin/users?page=1&limit=20
- * - Allows role change (PUT /api/admin/users/:id with { role })
- * - Allows activate/deactivate (PUT with { isActive })
- * - Allows delete (DELETE /api/admin/users/:id)
- *
- * Note: This page is protected by RoleGuard in App.jsx (admin only).
- */
-
 export default function Users() {
   const { user: me } = useAuth();
   const [items, setItems] = useState([]);
@@ -50,11 +40,8 @@ export default function Users() {
     try {
       const res = await adminService.updateUser(id, { role: newRole });
       if (res.ok) {
-        // update local list
-        setItems((s) => s.map(u => (u._id === id ? res.user : u)));
-      } else {
-        alert(res.error || 'Failed to update role');
-      }
+        setItems(s => s.map(u => (u._id === id ? res.user : u)));
+      } else alert(res.error || 'Failed to update role');
     } catch (err) {
       alert(err?.response?.data?.error || err.message || 'Network error');
     } finally {
@@ -68,7 +55,7 @@ export default function Users() {
     setSavingId(id);
     try {
       const res = await adminService.updateUser(id, { isActive: target });
-      if (res.ok) setItems((s) => s.map(u => (u._id === id ? res.user : u)));
+      if (res.ok) setItems(s => s.map(u => (u._id === id ? res.user : u)));
       else alert(res.error || 'Failed to update active state');
     } catch (err) {
       alert(err?.response?.data?.error || err.message || 'Network error');
@@ -86,12 +73,8 @@ export default function Users() {
     setSavingId(id);
     try {
       const res = await adminService.deleteUser(id);
-      if (res.ok) {
-        // refresh
-        fetchUsers();
-      } else {
-        alert(res.error || 'Failed to delete');
-      }
+      if (res.ok) fetchUsers();
+      else alert(res.error || 'Failed to delete');
     } catch (err) {
       alert(err?.response?.data?.error || err.message || 'Network error');
     } finally {
@@ -99,63 +82,86 @@ export default function Users() {
     }
   }
 
+  const card =
+    "bg-[#1e2229] rounded-2xl p-5 " +
+    "shadow-[6px_6px_12px_#14161a,-6px_-6px_12px_#242a32]";
+
+  const inset =
+    "bg-[#1e2229] rounded-xl px-3 py-2 " +
+    "shadow-[inset_4px_4px_8px_#14161a,inset_-4px_-4px_8px_#242a32]";
+
   return (
-    <div>
-      <div className="flex items-center justify-between mb-4">
+    <div className="text-gray-200">
+      {/* Header */}
+      <div className="flex items-center justify-between mb-6">
         <h2 className="text-2xl font-semibold">Users</h2>
-        <div className="text-sm text-gray-500">{meta ? `${meta.total} users` : ''}</div>
+        <div className="text-sm text-gray-400">
+          {meta ? `${meta.total} users` : ''}
+        </div>
       </div>
 
-      <div className="bg-white p-4 rounded shadow">
+      {/* Table container */}
+      <div className={card}>
         {loading ? (
-          <div className="text-gray-500">Loading…</div>
+          <div className="text-gray-400">Loading…</div>
         ) : items.length === 0 ? (
-          <div className="text-gray-500">No users found</div>
+          <div className="text-gray-400">No users found</div>
         ) : (
           <div className="overflow-x-auto">
-            <table className="w-full">
-              <thead>
+            <table className="w-full text-sm">
+              <thead className="text-gray-400">
                 <tr className="text-left">
-                  <th className="p-2 border-b">Name</th>
-                  <th className="p-2 border-b">Email</th>
-                  <th className="p-2 border-b">Role</th>
-                  <th className="p-2 border-b">Active</th>
-                  <th className="p-2 border-b">Joined</th>
-                  <th className="p-2 border-b">Actions</th>
+                  <th className="py-3 px-2">Name</th>
+                  <th className="py-3 px-2">Email</th>
+                  <th className="py-3 px-2">Role</th>
+                  <th className="py-3 px-2">Active</th>
+                  <th className="py-3 px-2">Joined</th>
+                  <th className="py-3 px-2">Actions</th>
                 </tr>
               </thead>
-              <tbody>
+
+              <tbody className="divide-y divide-[#14161a]">
                 {items.map(u => (
-                  <tr key={u._id} className="hover:bg-gray-50">
-                    <td className="p-2 border-b">{u.name}</td>
-                    <td className="p-2 border-b">{u.email}</td>
-                    <td className="p-2 border-b">
+                  <tr key={u._id} className="hover:bg-[#181b20]">
+                    <td className="py-3 px-2">{u.name}</td>
+                    <td className="py-3 px-2 text-gray-300">{u.email}</td>
+
+                    <td className="py-3 px-2">
                       <select
                         value={u.role}
                         onChange={(e) => changeRole(u._id, e.target.value)}
-                        className="border rounded px-2 py-1"
                         disabled={savingId === u._id}
+                        className={inset + " text-gray-200 bg-transparent"}
                       >
                         <option value="user">user</option>
                         <option value="manager">manager</option>
                         <option value="admin">admin</option>
                       </select>
                     </td>
-                    <td className="p-2 border-b">
+
+                    <td className="py-3 px-2">
                       <button
                         onClick={() => toggleActive(u._id, u.isActive)}
-                        className={`px-2 py-1 rounded ${u.isActive ? 'bg-green-100' : 'bg-gray-100'}`}
                         disabled={savingId === u._id}
+                        className={
+                          inset +
+                          " text-xs " +
+                          (u.isActive ? "text-emerald-400" : "text-gray-400")
+                        }
                       >
                         {u.isActive ? 'Active' : 'Inactive'}
                       </button>
                     </td>
-                    <td className="p-2 border-b">{new Date(u.createdAt).toLocaleDateString()}</td>
-                    <td className="p-2 border-b">
+
+                    <td className="py-3 px-2 text-gray-400">
+                      {new Date(u.createdAt).toLocaleDateString()}
+                    </td>
+
+                    <td className="py-3 px-2">
                       <button
                         onClick={() => removeUser(u._id)}
-                        className="px-2 py-1 bg-red-100 rounded text-red-600"
                         disabled={savingId === u._id}
+                        className="text-xs text-red-400 hover:underline"
                       >
                         Delete
                       </button>
@@ -168,14 +174,27 @@ export default function Users() {
         )}
       </div>
 
+      {/* Pagination */}
       {meta && (
-        <div className="mt-4 flex items-center justify-between">
-          <div className="text-sm text-gray-500">
+        <div className="mt-6 flex items-center justify-between text-sm text-gray-400">
+          <div>
             Page {meta.page} of {meta.totalPages} — {meta.total} results
           </div>
-          <div className="flex gap-2">
-            <button disabled={meta.page <= 1} onClick={() => setPage(meta.page - 1)} className="px-3 py-1 bg-gray-100 rounded disabled:opacity-50">Prev</button>
-            <button disabled={meta.page >= meta.totalPages} onClick={() => setPage(meta.page + 1)} className="px-3 py-1 bg-gray-100 rounded disabled:opacity-50">Next</button>
+          <div className="flex gap-3">
+            <button
+              disabled={meta.page <= 1}
+              onClick={() => setPage(meta.page - 1)}
+              className={inset + " disabled:opacity-40"}
+            >
+              Prev
+            </button>
+            <button
+              disabled={meta.page >= meta.totalPages}
+              onClick={() => setPage(meta.page + 1)}
+              className={inset + " disabled:opacity-40"}
+            >
+              Next
+            </button>
           </div>
         </div>
       )}

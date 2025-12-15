@@ -8,31 +8,49 @@ export default function Layout() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
   return (
-    <div className="min-h-screen flex bg-gray-50">
-      {/* Desktop sidebar */}
+    <div
+      className="
+        min-h-screen flex
+        bg-[#181b20] text-gray-200
+      "
+    >
+      {/* ================= Desktop Sidebar ================= */}
       <div className="hidden md:block">
         <Sidebar />
       </div>
 
-      {/* Mobile sidebar (overlay) */}
+      {/* ================= Mobile Sidebar ================= */}
       {sidebarOpen && (
         <div className="fixed inset-0 z-40 flex md:hidden">
           {/* Backdrop */}
           <div
-            className="fixed inset-0 bg-black/40"
+            className="fixed inset-0 bg-black/60"
             onClick={() => setSidebarOpen(false)}
           />
-          {/* Panel */}
-          <div className="relative z-50 w-64 h-full bg-white shadow-xl">
+
+          {/* Sidebar panel */}
+          <div
+            className="
+              relative z-50 w-64 h-full
+              bg-[#1e2229]
+              shadow-[6px_0_12px_#14161a,-6px_0_12px_#242a32]
+            "
+          >
             <Sidebar onLinkClick={() => setSidebarOpen(false)} />
           </div>
         </div>
       )}
 
-      {/* Main content */}
+      {/* ================= Main Content ================= */}
       <div className="flex-1 flex flex-col min-w-0">
-        <Topbar onMenuClick={() => setSidebarOpen((v) => !v)} />
-        <main className="p-4 md:p-6 flex-1 overflow-auto">
+        <Topbar onMenuClick={() => setSidebarOpen(v => !v)} />
+
+        <main
+          className="
+            flex-1 overflow-auto p-6
+            bg-[#181b20]
+          "
+        >
           <Outlet />
         </main>
       </div>

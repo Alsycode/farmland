@@ -5,7 +5,7 @@ import ThemeToggle from "./ThemeToggle.jsx";
 import en from "../locals/en.json";
 
 /**
- * Hero component
+ * Hero components
  * - Uses Tailwind utility classes (mobile-first)
  * - Accessible buttons and semantic structure
  * - Strings moved to src/locales/en.json for i18n readiness

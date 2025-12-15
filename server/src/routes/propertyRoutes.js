@@ -8,14 +8,18 @@ const { body, param, query } = require('express-validator');
 const asyncHandler = require('../middleware/asyncHandler');
 const { validate } = require('../middleware/validation');
 const { authenticate, requireRole } = require('../middleware/authMiddleware');
-const { 
-  createProperty, 
-  getProperty, 
-  listProperties, 
-  updateProperty, 
-  deleteProperty, 
-  deleteImage 
+const {
+  createProperty,
+  getProperty,
+  listProperties,
+  updateProperty,
+  deleteProperty,
+  deleteImage,
+  getTrendingProperties,
+  getFeaturedProperties,
+  getUpcomingProperties
 } = require('../controllers/propertyController');
+
 console.log('Property controllers:', {
   createProperty: !!createProperty,
   getProperty: !!getProperty,
@@ -71,6 +75,20 @@ router.post(
 );
 
 // Get property by id (public)
+router.get(
+  '/type/trending',
+  asyncHandler(getTrendingProperties)
+);
+
+router.get(
+  '/type/featured',
+  asyncHandler(getFeaturedProperties)
+);
+
+router.get(
+  '/type/upcoming',
+  asyncHandler(getUpcomingProperties)
+);
 router.get(
   '/:id',
   [ param('id').isMongoId().withMessage('Invalid property id'), validate ],

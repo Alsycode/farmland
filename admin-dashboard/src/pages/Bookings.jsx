@@ -3,12 +3,6 @@ import React, { useEffect, useState } from 'react';
 import bookingService from '../services/bookingService';
 import { useAuth } from '../context/AuthContext';
 
-/**
- * Bookings page:
- * - Lists bookings (for users: own bookings; for manager/admin: all)
- * - Managers/Admins can change status to confirmed/rejected
- * - Users can cancel their own bookings
- */
 export default function Bookings() {
   const { user } = useAuth();
   const [items, setItems] = useState([]);
@@ -46,11 +40,8 @@ export default function Bookings() {
     if (!confirm(`Change status to ${status}?`)) return;
     try {
       const res = await bookingService.update(id, { status });
-      if (res.ok) {
-        fetchList();
-      } else {
-        alert(res.error || 'Failed');
-      }
+      if (res.ok) fetchList();
+      else alert(res.error || 'Failed');
     } catch (err) {
       alert(err?.response?.data?.error || err.message || 'Network error');
     }
@@ -67,57 +58,117 @@ export default function Bookings() {
     }
   }
 
+  /* neumorphism helpers */
+  const card =
+    "bg-[#1e2229] rounded-2xl p-5 " +
+    "shadow-[6px_6px_12px_#14161a,-6px_-6px_12px_#242a32]";
+
+  const inset =
+    "bg-[#1e2229] rounded-xl px-3 py-2 " +
+    "shadow-[inset_4px_4px_8px_#14161a,inset_-4px_-4px_8px_#242a32]";
+
   return (
-    <div>
-      <div className="flex items-center justify-between mb-4">
+    <div className="text-gray-200">
+      {/* Header */}
+      <div className="flex items-center justify-between mb-6">
         <h2 className="text-2xl font-semibold">Bookings</h2>
-        <div className="flex items-center gap-2">
-          <select value={filterStatus} onChange={(e) => { setFilterStatus(e.target.value); setPage(1); }} className="border rounded px-2 py-1">
-            <option value="">All statuses</option>
-            <option value="pending">Pending</option>
-            <option value="confirmed">Confirmed</option>
-            <option value="rejected">Rejected</option>
-            <option value="cancelled">Cancelled</option>
-          </select>
-        </div>
+
+        <select
+          value={filterStatus}
+          onChange={(e) => {
+            setFilterStatus(e.target.value);
+            setPage(1);
+          }}
+          className={inset + " text-sm text-gray-200 bg-transparent"}
+        >
+          <option value="">All statuses</option>
+          <option value="pending">Pending</option>
+          <option value="confirmed">Confirmed</option>
+          <option value="rejected">Rejected</option>
+          <option value="cancelled">Cancelled</option>
+        </select>
       </div>
 
-      <div className="bg-white p-4 rounded shadow">
+      {/* Table */}
+      <div className={card}>
         {loading ? (
-          <div className="text-gray-500">Loading…</div>
+          <div className="text-gray-400">Loading…</div>
         ) : items.length === 0 ? (
-          <div className="text-gray-500">No bookings found</div>
+          <div className="text-gray-400">No bookings found</div>
         ) : (
           <div className="overflow-x-auto">
-            <table className="w-full table-auto">
-              <thead>
+            <table className="w-full text-sm">
+              <thead className="text-gray-400">
                 <tr className="text-left">
-                  <th className="p-2 border-b">Property</th>
-                  <th className="p-2 border-b">User</th>
-                  <th className="p-2 border-b">Preferred</th>
-                  <th className="p-2 border-b">Message</th>
-                  <th className="p-2 border-b">Status</th>
-                  <th className="p-2 border-b">Actions</th>
+                  <th className="py-3 px-2">Property</th>
+                  <th className="py-3 px-2">User</th>
+                  <th className="py-3 px-2">Preferred</th>
+                  <th className="py-3 px-2">Message</th>
+                  <th className="py-3 px-2">Status</th>
+                  <th className="py-3 px-2">Actions</th>
                 </tr>
               </thead>
-              <tbody>
-                {items.map(b => (
-                  <tr key={b._id} className="hover:bg-gray-50">
-                    <td className="p-2 border-b">{b.property?.title || b.property}</td>
-                    <td className="p-2 border-b">{b.user?.name || b.user?.email}</td>
-                    <td className="p-2 border-b">{new Date(b.preferredDate).toLocaleString()} {b.preferredTime || ''}</td>
-                    <td className="p-2 border-b">{b.message}</td>
-                    <td className="p-2 border-b">{b.status}</td>
-                    <td className="p-2 border-b space-x-2">
-                      {user && (user.role === 'admin' || user.role === 'manager') && b.status !== 'confirmed' && (
-                        <button onClick={() => changeStatus(b._id, 'confirmed')} className="px-2 py-1 bg-green-100 rounded">Confirm</button>
-                      )}
-                      {user && (user.role === 'admin' || user.role === 'manager') && b.status !== 'rejected' && (
-                        <button onClick={() => changeStatus(b._1d || b._id, 'rejected')} className="px-2 py-1 bg-yellow-100 rounded">Reject</button>
-                      )}
-                      {user && user.role === 'user' && b.user && b.user._id === user._id && b.status !== 'cancelled' && (
-                        <button onClick={() => cancelBooking(b._id)} className="px-2 py-1 bg-red-100 rounded text-red-600">Cancel</button>
-                      )}
+
+              <tbody className="divide-y divide-[#14161a]">
+                {items.map((b) => (
+                  <tr key={b._id} className="hover:bg-[#181b20]">
+                    <td className="py-3 px-2">
+                      {b.property?.title || b.property}
+                    </td>
+                    <td className="py-3 px-2 text-gray-300">
+                      {b.user?.name || b.user?.email}
+                    </td>
+                    <td className="py-3 px-2 text-gray-400">
+                      {new Date(b.preferredDate).toLocaleString()}
+                      {b.preferredTime ? ` ${b.preferredTime}` : ''}
+                    </td>
+                    <td className="py-3 px-2 text-gray-300">
+                      {b.message}
+                    </td>
+                    <td className="py-3 px-2">
+                      <span className="text-xs text-amber-400">
+                        {b.status}
+                      </span>
+                    </td>
+                    <td className="py-3 px-2 space-x-2">
+                      {user &&
+                        (user.role === 'admin' || user.role === 'manager') &&
+                        b.status !== 'confirmed' && (
+                          <button
+                            onClick={() =>
+                              changeStatus(b._id, 'confirmed')
+                            }
+                            className="text-xs text-emerald-400 hover:underline"
+                          >
+                            Confirm
+                          </button>
+                        )}
+
+                      {user &&
+                        (user.role === 'admin' || user.role === 'manager') &&
+                        b.status !== 'rejected' && (
+                          <button
+                            onClick={() =>
+                              changeStatus(b._id, 'rejected')
+                            }
+                            className="text-xs text-yellow-400 hover:underline"
+                          >
+                            Reject
+                          </button>
+                        )}
+
+                      {user &&
+                        user.role === 'user' &&
+                        b.user &&
+                        b.user._id === user._id &&
+                        b.status !== 'cancelled' && (
+                          <button
+                            onClick={() => cancelBooking(b._id)}
+                            className="text-xs text-red-400 hover:underline"
+                          >
+                            Cancel
+                          </button>
+                        )}
                     </td>
                   </tr>
                 ))}
@@ -127,12 +178,27 @@ export default function Bookings() {
         )}
       </div>
 
+      {/* Pagination */}
       {meta && (
-        <div className="mt-4 flex items-center justify-between">
-          <div className="text-sm text-gray-500">Page {meta.page} of {meta.totalPages} — {meta.total} results</div>
-          <div className="flex gap-2">
-            <button disabled={meta.page <= 1} onClick={() => setPage(meta.page - 1)} className="px-3 py-1 bg-gray-100 rounded disabled:opacity-50">Prev</button>
-            <button disabled={meta.page >= meta.totalPages} onClick={() => setPage(meta.page + 1)} className="px-3 py-1 bg-gray-100 rounded disabled:opacity-50">Next</button>
+        <div className="mt-6 flex items-center justify-between text-sm text-gray-400">
+          <div>
+            Page {meta.page} of {meta.totalPages} — {meta.total} results
+          </div>
+          <div className="flex gap-3">
+            <button
+              disabled={meta.page <= 1}
+              onClick={() => setPage(meta.page - 1)}
+              className={inset + " disabled:opacity-40"}
+            >
+              Prev
+            </button>
+            <button
+              disabled={meta.page >= meta.totalPages}
+              onClick={() => setPage(meta.page + 1)}
+              className={inset + " disabled:opacity-40"}
+            >
+              Next
+            </button>
           </div>
         </div>
       )}

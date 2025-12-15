@@ -87,7 +87,7 @@ export default function CardsGrid() {
             <div className="absolute inset-0 pointer-events-none" />
           </div>
         </div>
-      </div>
+      </div>a
     </div>
   );
 }

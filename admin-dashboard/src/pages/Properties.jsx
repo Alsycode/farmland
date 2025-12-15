@@ -32,7 +32,7 @@ export default function Properties() {
         page,
         limit,
         q: searchParams.get('q'),
-        sort: searchParams.get('sort')
+        sort: searchParams.get('sort'),
       });
       const res = await propertyService.list(params);
       if (res.ok) {
@@ -66,71 +66,123 @@ export default function Properties() {
     if (!confirm('Delete this property? This action cannot be undone.')) return;
     try {
       await propertyService.remove(id);
-      // refresh list
       fetchList();
     } catch (err) {
       alert('Delete failed: ' + (err?.response?.data?.error || err.message));
     }
   }
 
+  /* ================= NEUMORPHISM HELPERS ================= */
+
+  const card =
+    "bg-[#1e2229] rounded-2xl p-5 " +
+    "shadow-[6px_6px_12px_#14161a,-6px_-6px_12px_#242a32]";
+
+  const inset =
+    "bg-[#1e2229] rounded-xl px-4 py-2 outline-none " +
+    "shadow-[inset_4px_4px_8px_#14161a,inset_-4px_-4px_8px_#242a32]";
+
+  const button =
+    "rounded-xl px-4 py-2 text-indigo-400 transition " +
+    "shadow-[4px_4px_8px_#14161a,-4px_-4px_8px_#242a32] " +
+    "hover:shadow-[inset_4px_4px_8px_#14161a,inset_-4px_-4px_8px_#242a32]";
+
   return (
-    <div>
-      <div className="flex justify-between items-center mb-4">
+    <div className="text-gray-200">
+      {/* ================= HEADER ================= */}
+      <div className="flex justify-between items-center mb-6">
         <h2 className="text-2xl font-semibold">Properties</h2>
         {user && (user.role === 'admin' || user.role === 'manager') && (
-          <button onClick={() => navigate('/properties/new')} className="px-3 py-2 bg-indigo-600 text-white rounded">
+          <button
+            onClick={() => navigate('/properties/new')}
+            className={button}
+          >
             Create
           </button>
         )}
       </div>
 
-      <form onSubmit={onSearch} className="flex gap-2 mb-4">
+      {/* ================= SEARCH FORM ================= */}
+      <form onSubmit={onSearch} className="flex gap-4 mb-6">
         <input
           value={q}
           onChange={(e) => setQ(e.target.value)}
           placeholder="Search properties..."
-          className="border rounded px-3 py-2 flex-1"
+          className={`${inset} flex-1 text-gray-200 bg-transparent`}
         />
-        <button type="submit" className="px-3 py-2 bg-indigo-600 text-white rounded">Search</button>
+        <button type="submit" className={button}>
+          Search
+        </button>
       </form>
 
-      <div className="bg-white p-4 rounded shadow">
+      {/* ================= TABLE ================= */}
+      <div className={card}>
         {loading ? (
-          <div className="text-gray-500">Loading…</div>
+          <div className="text-gray-400">Loading…</div>
         ) : error ? (
-          <div className="text-red-600">{error}</div>
+          <div className="text-red-400">{error}</div>
         ) : items.length === 0 ? (
-          <div className="text-gray-500">No properties found.</div>
+          <div className="text-gray-400">No properties found.</div>
         ) : (
           <div className="overflow-x-auto">
-            <table className="w-full table-auto border-collapse">
-              <thead>
+            <table className="w-full text-sm">
+              <thead className="text-gray-400">
                 <tr className="text-left">
-                  <th className="p-2 border-b">Title</th>
-                  <th className="p-2 border-b">Price</th>
-                  <th className="p-2 border-b">Area</th>
-                  <th className="p-2 border-b">Address</th>
-                  <th className="p-2 border-b">Status</th>
-                  <th className="p-2 border-b">Owner</th>
-                  <th className="p-2 border-b">Actions</th>
+                  <th className="py-3 px-2">Title</th>
+                  <th className="py-3 px-2">Price</th>
+                  <th className="py-3 px-2">Area</th>
+                  <th className="py-3 px-2">Address</th>
+                  <th className="py-3 px-2">Status</th>
+                  <th className="py-3 px-2">Owner</th>
+                  <th className="py-3 px-2">Actions</th>
                 </tr>
               </thead>
-              <tbody>
+
+              <tbody className="divide-y divide-[#14161a]">
                 {items.map((it) => (
-                  <tr key={it._id} className="hover:bg-gray-50">
-                    <td className="p-2 border-b">{it.title}</td>
-                    <td className="p-2 border-b">₹{it.price?.toLocaleString()}</td>
-                    <td className="p-2 border-b">{it.area} {it.unit}</td>
-                    <td className="p-2 border-b">{it.address}</td>
-                    <td className="p-2 border-b">{it.status}</td>
-                    <td className="p-2 border-b">{it.owner?.name || it.owner?.email}</td>
-                    <td className="p-2 border-b space-x-2">
-                      <Link to={`/properties/${it._id}`} className="px-2 py-1 bg-gray-100 rounded">View</Link>
-                      {(user?.role === 'admin' || user?.role === 'manager' || (user?.role === 'user' && user._id === it.owner?._id)) && (
-                        <Link to={`/properties/${it._id}/edit`} className="px-2 py-1 bg-yellow-100 rounded">Edit</Link>
+                  <tr key={it._id} className="hover:bg-[#181b20]">
+                    <td className="py-3 px-2">{it.title}</td>
+                    <td className="py-3 px-2 text-gray-300">
+                      ₹{it.price?.toLocaleString()}
+                    </td>
+                    <td className="py-3 px-2 text-gray-300">
+                      {it.area} {it.unit}
+                    </td>
+                    <td className="py-3 px-2 text-gray-300">{it.address}</td>
+                    <td className="py-3 px-2 text-amber-400">{it.status}</td>
+                    <td className="py-3 px-2 text-gray-300">
+                      {it.owner?.name || it.owner?.email}
+                    </td>
+                    <td className="py-3 px-2 space-x-3">
+                      <Link
+                        to={`/properties/${it._id}`}
+                        className="text-xs text-indigo-400 hover:underline"
+                      >
+                        View
+                      </Link>
+
+                      {(user?.role === 'admin' ||
+                        user?.role === 'manager' ||
+                        (user?.role === 'user' &&
+                          user._id === it.owner?._id)) && (
+                        <Link
+                          to={`/properties/${it._id}/edit`}
+                          className="text-xs text-yellow-400 hover:underline"
+                        >
+                          Edit
+                        </Link>
                       )}
-                      {(user?.role === 'admin' || user?.role === 'manager' || (user?.role === 'user' && user._id === it.owner?._id)) && (
-                        <button onClick={() => handleDelete(it._id)} className="px-2 py-1 bg-red-100 rounded text-red-700">Delete</button>
+
+                      {(user?.role === 'admin' ||
+                        user?.role === 'manager' ||
+                        (user?.role === 'user' &&
+                          user._id === it.owner?._id)) && (
+                        <button
+                          onClick={() => handleDelete(it._id)}
+                          className="text-xs text-red-400 hover:underline"
+                        >
+                          Delete
+                        </button>
                       )}
                     </td>
                   </tr>
@@ -141,17 +193,31 @@ export default function Properties() {
         )}
       </div>
 
+      {/* ================= PAGINATION ================= */}
       {meta && (
-        <div className="mt-4 flex items-center justify-between">
-          <div className="text-sm text-gray-500">
+        <div className="mt-6 flex items-center justify-between text-sm text-gray-400">
+          <div>
             Page {meta.page} of {meta.totalPages} — {meta.total} results
           </div>
-          <div className="flex gap-2">
-            <button disabled={meta.page <= 1} onClick={() => goPage(meta.page - 1)} className="px-3 py-1 bg-gray-100 rounded disabled:opacity-50">Prev</button>
-            <button disabled={meta.page >= meta.totalPages} onClick={() => goPage(meta.page + 1)} className="px-3 py-1 bg-gray-100 rounded disabled:opacity-50">Next</button>
+          <div className="flex gap-3">
+            <button
+              disabled={meta.page <= 1}
+              onClick={() => goPage(meta.page - 1)}
+              className={`${button} disabled:opacity-40`}
+            >
+              Prev
+            </button>
+            <button
+              disabled={meta.page >= meta.totalPages}
+              onClick={() => goPage(meta.page + 1)}
+              className={`${button} disabled:opacity-40`}
+            >
+              Next
+            </button>
           </div>
         </div>
       )}
     </div>
   );
 }
+s

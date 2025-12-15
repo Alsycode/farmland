@@ -73,7 +73,16 @@ export default function AmenitiesSection({ items = [] }) {
             {/* Icon container */}
             <div className="ml-4 flex-shrink-0">
               <div className="w-10 h-10 rounded-full bg-emerald-50 flex items-center justify-center">
-               a
+                 <img
+        src="/icon.svg"
+        alt="icon"
+        className="w-7 h-7 object-contain"
+        onError={(e) => {
+          // fallback to SVG if file not found
+          e.target.onerror = null;
+          e.target.replaceWith(fallbackIcon());
+        }}
+      />
               </div>
             </div>
           </div>

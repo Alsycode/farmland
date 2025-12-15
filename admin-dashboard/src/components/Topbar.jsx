@@ -2,55 +2,71 @@
 import React from 'react';
 import { useAuth } from '../context/AuthContext';
 
-/**
- * Topbar with mobile menu button and responsive user info.
- */
 export default function Topbar({ onMenuClick }) {
   const { user, logout } = useAuth();
 
   return (
-    <header className="bg-white border-b px-4 md:px-6 py-3 flex items-center justify-between gap-4 sticky top-0 z-30">
+    <header
+      className="
+        sticky top-0 z-30
+        px-4 md:px-6 py-3
+        flex items-center justify-between
+        bg-[#181b20] text-gray-200
+        shadow-[0_6px_12px_#14161a]
+      "
+    >
+      {/* LEFT */}
       <div className="flex items-center gap-3">
-        {/* Mobile menu button */}
+        {/* Mobile menu */}
         <button
           type="button"
-          className="inline-flex items-center justify-center p-2 rounded-md text-gray-600 hover:bg-gray-100 md:hidden"
           onClick={onMenuClick}
           aria-label="Open sidebar"
+          className="
+            md:hidden px-3 py-2 rounded-xl text-gray-300
+            shadow-[4px_4px_8px_#14161a,-4px_-4px_8px_#242a32]
+            hover:text-gray-100
+            transition
+          "
         >
-          <span className="sr-only">Open sidebar</span>
           ☰
         </button>
 
-        <h1 className="text-base md:text-lg font-semibold truncate">
+        <h1 className="text-base md:text-lg font-semibold tracking-wide">
           Admin Dashboard
         </h1>
       </div>
 
-      <div className="flex items-center gap-3">
+      {/* RIGHT */}
+      <div className="flex items-center gap-4">
         {user ? (
           <>
-            <div className="hidden sm:block text-right text-sm">
-              <div className="font-medium truncate max-w-[160px]">
+            {/* User info */}
+            <div className="hidden sm:block text-right">
+              <div className="text-sm font-medium truncate max-w-[160px]">
                 {user.name || user.email}
               </div>
-              <div className="text-xs text-gray-500 mt-0.5">
-                <span className="inline-flex px-2 py-0.5 bg-indigo-100 text-indigo-700 rounded">
-                  {user.role}
-                </span>
-              </div>
-            </div>
-
-            {/* On very small screens, just show role chip */}
-            <div className="sm:hidden">
-              <span className="inline-flex px-2 py-0.5 bg-indigo-100 text-indigo-700 rounded text-xs capitalize">
+              <span
+                className="
+                  inline-flex mt-1 px-3 py-0.5 rounded-full
+                  text-xs text-amber-400
+                  shadow-[inset_2px_2px_4px_#14161a,inset_-2px_-2px_4px_#242a32]
+                "
+              >
                 {user.role}
               </span>
             </div>
 
+            {/* Logout */}
             <button
-              onClick={() => logout()}
-              className="px-3 py-1 bg-red-500 text-white rounded hover:bg-red-600 text-xs md:text-sm"
+              onClick={logout}
+              className="
+                px-4 py-1.5 rounded-xl text-xs md:text-sm
+                text-red-400
+                shadow-[4px_4px_8px_#14161a,-4px_-4px_8px_#242a32]
+                hover:shadow-[inset_4px_4px_8px_#14161a,inset_-4px_-4px_8px_#242a32]
+                transition
+              "
             >
               Logout
             </button>
@@ -58,7 +74,11 @@ export default function Topbar({ onMenuClick }) {
         ) : (
           <a
             href="/login"
-            className="px-3 py-1 bg-indigo-600 text-white rounded hover:bg-indigo-700 text-xs md:text-sm"
+            className="
+              px-4 py-1.5 rounded-xl text-sm
+              text-indigo-400
+              shadow-[4px_4px_8px_#14161a,-4px_-4px_8px_#242a32]
+            "
           >
             Sign in
           </a>

@@ -258,3 +258,48 @@ exports.deleteImage = async (req, res, next) => {
     return next(err);
   }
 };
+/**
+ * Get properties by listing type (Trending / Featured / Upcoming)
+ * Reusable internal helper
+ */
+const getByListingType = async (req, res, next, type) => {
+  try {
+    const { limit = 10 } = req.query;
+
+    const items = await Property.find({
+      listingType: type,
+      status: 'published'
+    })
+      .sort({ createdAt: -1 })
+      .limit(Number(limit))
+      .populate('owner', 'name email')
+      .lean();
+
+    return res.json({
+      ok: true,
+      listingType: type,
+      count: items.length,
+      items
+    });
+  } catch (err) {
+    return next(err);
+  }
+};
+
+/**
+ * GET /api/properties/trending
+ */
+exports.getTrendingProperties = (req, res, next) =>
+  getByListingType(req, res, next, 'trending');
+
+/**
+ * GET /api/properties/featured
+ */
+exports.getFeaturedProperties = (req, res, next) =>
+  getByListingType(req, res, next, 'featured');
+
+/**
+ * GET /api/properties/upcoming
+ */
+exports.getUpcomingProperties = (req, res, next) =>
+  getByListingType(req, res, next, 'upcoming');
