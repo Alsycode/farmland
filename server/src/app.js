@@ -35,7 +35,7 @@ function createApp() {
   // app.use(cors({ origin: true, credentials: true }));
 app.use(cors({
   origin: [
-   
+    'http://localhost:5173',
      'http://localhost:5174',  
       'http://localhost:5175',    // Vite dev server
     'http://127.0.0.1:5173',     // same for IPv4 localhost

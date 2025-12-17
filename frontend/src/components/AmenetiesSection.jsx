@@ -1,89 +1,72 @@
 import React from "react";
 
-/**
- * AmenitiesSection with image icons stored in /public/icons/
- * - items: array of strings or { label, iconPath }
- * - If iconPath missing, the component automatically loads /public/icons/<slug>.png
- * - If icon doesn't exist, a fallback SVG is shown.
- */
-
 export default function AmenitiesSection({ items = [] }) {
   const normalized = items.map((it) =>
-    typeof it === "string"
-      ? { label: it, iconPath: null }
-      : it
+    typeof it === "string" ? { label: it, iconPath: null } : it
   );
 
-  // Creates a slug from amenity name → "Water Supply" → "water_supply"
-  const toSlug = (str) =>
-    str.toLowerCase().replace(/\s+/g, "_").replace(/[^\w]/g, "");
-
-  const getIcon = (label, customIconPath) => {
-    const slug = toSlug(label);
-    const iconSrc = customIconPath || `/icons/${slug}.png`;
-
-    return (
-      <img
-        src={iconSrc}
-        alt={label}
-        className="w-7 h-7 object-contain"
-        onError={(e) => {
-          // fallback to SVG if file not found
-          e.target.onerror = null;
-          e.target.replaceWith(fallbackIcon());
-        }}
-      />
-    );
-  };
-
   const fallbackIcon = () => (
-    <div className="w-7 h-7 flex items-center justify-center">
-      <svg
-        width="26"
-        height="26"
-        viewBox="0 0 24 24"
-        fill="none"
-        className="text-emerald-500"
-      >
-        <rect
-          x="3"
-          y="3"
-          width="18"
-          height="18"
-          rx="4"
-          stroke="currentColor"
-          strokeWidth="1.2"
-        />
-      </svg>
-    </div>
+    <svg
+      width="22"
+      height="22"
+      viewBox="0 0 24 24"
+      fill="none"
+      className="text-green-600"
+    >
+      <rect
+        x="3"
+        y="3"
+        width="18"
+        height="18"
+        rx="4"
+        stroke="currentColor"
+        strokeWidth="1.2"
+      />
+    </svg>
   );
 
   return (
-    <section className="mt-8 bg-white rounded-xl p-6 shadow-sm">
-      <h2 className="text-2xl font-semibold mb-6">AMENITIES</h2>
+    <section
+      className="
+        bg-[#eef4ee] rounded-3xl p-6
+        shadow-[8px_8px_16px_#cfd8cf,-8px_-8px_16px_#ffffff]
+      "
+    >
+      <h2 className="text-xl font-semibold text-green-900 mb-6">
+        Amenities
+      </h2>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
         {normalized.map((a, i) => (
           <div
             key={i}
-            className="flex items-center justify-between bg-white border rounded-lg p-4 shadow-sm"
+            className="
+              flex items-center justify-between p-4 rounded-2xl
+              bg-[#eef4ee]
+              shadow-[6px_6px_12px_#cfd8cf,-6px_-6px_12px_#ffffff]
+            "
           >
-            <div className="text-gray-800 font-medium">{a.label}</div>
+            <div className="text-green-900 font-medium">
+              {a.label}
+            </div>
 
-            {/* Icon container */}
-            <div className="ml-4 flex-shrink-0">
-              <div className="w-10 h-10 rounded-full bg-emerald-50 flex items-center justify-center">
-                 <img
-        src="/icon.svg"
-        alt="icon"
-        className="w-7 h-7 object-contain"
-        onError={(e) => {
-          // fallback to SVG if file not found
-          e.target.onerror = null;
-          e.target.replaceWith(fallbackIcon());
-        }}
-      />
-              </div>
+            {/* Icon well */}
+            <div
+              className="
+                w-11 h-11 rounded-full flex items-center justify-center
+                bg-[#eef4ee]
+                shadow-[inset_4px_4px_8px_#cfd8cf,inset_-4px_-4px_8px_#ffffff]
+              "
+            >
+              <img
+                src="/icon.svg"
+                alt={a.label}
+                className="w-6 h-6 object-contain"
+                onError={(e) => {
+                  e.target.onerror = null;
+                  e.target.replaceWith(fallbackIcon());
+                }}
+              />
             </div>
           </div>
         ))}

@@ -2,72 +2,59 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { FiHeart } from 'react-icons/fi';
 
-/**
- * PropertyCard
- * - VISUAL REFACTOR ONLY
- * - Matches Homepage B card UI exactly
- * - Logic, props, routing unchanged
- */
-
 export default function PropertyCard({ property }) {
   const img = property?.images?.[0]?.url || property?.image || null;
 
   return (
-    <article className="w-full rounded-xl overflow-hidden bg-white shadow-md hover:shadow-lg transition">
-
-      {/* IMAGE */}
+    <article
+      className="
+        rounded-2xl overflow-hidden
+        bg-[#eef4ee]
+        shadow-[4px_4px_8px_#cfd8cf,-4px_-4px_8px_#ffffff]
+        hover:shadow-[6px_6px_12px_#cfd8cf,-6px_-6px_12px_#ffffff]
+        transition
+      "
+    >
       <div className="relative">
         {img ? (
-          <img
-            src={img}
-            alt={property.title}
-            className="w-full h-36 sm:h-44 md:h-52 object-cover"
-            loading="lazy"
-          />
+          <img src={img} alt={property.title} className="h-52 w-full object-cover" />
         ) : (
-          <div className="w-full h-36 sm:h-44 md:h-52 bg-gray-100 flex items-center justify-center text-gray-400 text-sm">
+          <div className="h-52 flex items-center justify-center text-green-600">
             No image
           </div>
         )}
 
-        {/* HEART ICON */}
         <button
-          type="button"
-          aria-label="Add to favorites"
           className="
-            absolute top-3 right-3
-            bg-white/90 backdrop-blur-sm
-            p-2 sm:p-2.5
-            rounded-full shadow-sm
-            hover:bg-white transition
+            absolute top-3 right-3 p-2 rounded-full
+            bg-[#eef4ee]
+            shadow-[2px_2px_4px_#cfd8cf,-2px_-2px_4px_#ffffff]
           "
         >
-          <FiHeart size={18} className="text-gray-600" />
+          <FiHeart className="text-green-700" />
         </button>
       </div>
 
-      {/* CONTENT */}
-      <div className="p-3 sm:p-4">
+      <div className="p-4">
         <Link
           to={`/properties/${property._id}`}
-          className="block font-semibold text-base sm:text-lg md:text-xl text-gray-800 leading-snug hover:underline"
+          className="block font-semibold text-lg hover:underline"
         >
           {property.title}
         </Link>
 
-        <div className="mt-2 font-bold text-accent text-sm sm:text-base md:text-lg">
+        <div className="mt-2 font-bold text-green-700">
           ₹{property.price?.toLocaleString() || '—'}
         </div>
 
-        <div className="mt-3 text-xs sm:text-sm text-gray-500">
-          {property.area || '—'} {property.unit || ''}
+        <div className="mt-2 text-sm text-green-700">
+          {property.area} {property.unit}
         </div>
 
-        <div className="text-xs sm:text-sm text-gray-500">
+        <div className="text-sm text-green-600">
           {property.address}
         </div>
       </div>
-
     </article>
   );
 }

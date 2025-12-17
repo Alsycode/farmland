@@ -1,20 +1,9 @@
-// path: src/pages/Search.jsx
 import React, { useEffect, useState } from 'react';
 import propertyService from '../services/propertyService';
 import SearchForm from '../components/SearchForm';
 import FiltersSidebar from '../components/FiltersSidebar';
 import PropertyList from '../components/PropertyList';
 import Pagination from '../components/Pagination';
-
-/**
- * Search page - wired to GET /api/properties with server-side filters.
- * Query params used: page, limit, q, category, amenities (csv), minPrice, maxPrice, minArea, maxArea, sort
- *
- * Behavior:
- * - Filters are applied and sent to backend.
- * - Pagination controlled by backend meta: { page, totalPages, total }
- * - View toggle grid/list available.
- */
 
 export default function Search() {
   const [filters, setFilters] = useState({});
@@ -28,92 +17,95 @@ export default function Search() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
-  // Build params for API
   function buildParams() {
     const params = { page, limit };
     if (q) params.q = q;
-    if (filters.category) params.category = filters.category;
-    if (filters.amenities) params.amenities = filters.amenities;
-    if (filters.minPrice) params.minPrice = filters.minPrice;
-    if (filters.maxPrice) params.maxPrice = filters.maxPrice;
-    if (filters.minArea) params.minArea = filters.minArea;
-    if (filters.maxArea) params.maxArea = filters.maxArea;
+    Object.entries(filters).forEach(([k, v]) => v && (params[k] = v));
     return params;
   }
 
   useEffect(() => {
     fetchList();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line
   }, [page, filters, q]);
 
   async function fetchList() {
-    setLoading(true); setError(null);
+    setLoading(true);
+    setError(null);
     try {
-      const params = buildParams();
-      const res = await propertyService.list(params);
-      // Backend common shapes: { ok: true, items, meta } or { items, meta } or array
-      if (res.ok) {
-        setItems(res.items || []);
-        setMeta(res.meta || { page: params.page || 1, totalPages: 1, total: (res.items || []).length });
-      } else if (Array.isArray(res)) {
-        setItems(res);
-        setMeta({ page: params.page || 1, totalPages: 1, total: res.length });
-      } else {
-        setItems(res.items || res.data || []);
-        setMeta(res.meta || { page: params.page || 1, totalPages: 1, total: (res.items || res.data || []).length });
-      }
+      const res = await propertyService.list(buildParams());
+      setItems(res.items || res.data || []);
+      setMeta(res.meta || meta);
     } catch (err) {
-      setError(err?.response?.data?.error || err.message || 'Failed to load properties');
+      setError(err?.message || 'Failed to load properties');
     } finally {
       setLoading(false);
     }
   }
 
-  function onSearch(qv) {
-    setQ(qv);
-    setPage(1);
-  }
-
-  function onApplyFilters(f) {
-    setFilters(f);
-    setPage(1);
-  }
-
-  function onResetFilters() {
-    setFilters({});
-    setPage(1);
-  }
-
   return (
-    <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
-      <div className="lg:col-span-1">
-        <FiltersSidebar onApply={onApplyFilters} onReset={onResetFilters} initialFilters={filters} />
-      </div>
+    <div className="bg-[#eef4ee] min-h-screen">
+      <div className="max-w-7xl mx-auto px-4 py-10 grid grid-cols-1 lg:grid-cols-4 gap-8">
 
-      <div className="lg:col-span-3">
-        <div className="mb-4 flex items-center justify-between">
-          <SearchForm initialQuery={q} onSearch={onSearch} />
-          <div className="flex items-center gap-2">
-            <div className="text-sm text-gray-500">View</div>
-            <button onClick={() => setView('grid')} className={`px-2 py-1 rounded ${view === 'grid' ? 'bg-indigo-600 text-white' : 'bg-white border'}`}>Grid</button>
-            <button onClick={() => setView('list')} className={`px-2 py-1 rounded ${view === 'list' ? 'bg-indigo-600 text-white' : 'bg-white border'}`}>List</button>
-          </div>
+        {/* FILTERS */}
+        <div>
+          <FiltersSidebar
+            onApply={(f) => { setFilters(f); setPage(1); }}
+            onReset={() => { setFilters({}); setPage(1); }}
+            initialFilters={filters}
+          />
         </div>
 
-        <div className="bg-white p-4 rounded shadow">
-          {loading ? (
-            <div className="text-gray-500">Loading properties…</div>
-          ) : error ? (
-            <div className="text-red-600">{error}</div>
-          ) : (
-            <>
-              <PropertyList items={items} view={view} />
-              <div className="mt-4 flex items-center justify-between">
-                <div className="text-sm text-gray-500">Showing page {meta.page} of {meta.totalPages} — {meta.total} results</div>
-                <Pagination page={meta.page} totalPages={meta.totalPages} onPageChange={(p) => setPage(p)} />
-              </div>
-            </>
-          )}
+        {/* RESULTS */}
+        <div className="lg:col-span-3 space-y-6">
+          <div className="flex flex-wrap gap-4 items-center justify-between">
+            <SearchForm initialQuery={q} onSearch={(v) => { setQ(v); setPage(1); }} />
+
+            <div className="flex gap-2">
+              {['grid', 'list'].map(v => (
+                <button
+                  key={v}
+                  onClick={() => setView(v)}
+                  className={`
+                    px-4 py-2 rounded-xl text-sm
+                    ${view === v
+                      ? 'bg-green-600 text-white'
+                      : 'bg-[#eef4ee] text-green-800'}
+                    shadow-[2px_2px_4px_#cfd8cf,-2px_-2px_4px_#ffffff]
+                  `}
+                >
+                  {v.charAt(0).toUpperCase() + v.slice(1)}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          <div
+            className="
+              bg-[#eef4ee] p-6 rounded-3xl
+              shadow-[6px_6px_12px_#cfd8cf,-6px_-6px_12px_#ffffff]
+            "
+          >
+            {loading ? (
+              <div className="text-green-700">Loading properties…</div>
+            ) : error ? (
+              <div className="text-red-600">{error}</div>
+            ) : (
+              <>
+                <PropertyList items={items} view={view} />
+                <div className="mt-6 flex justify-between items-center text-sm text-green-700">
+                  <span>
+                    Page {meta.page} of {meta.totalPages} — {meta.total} results
+                  </span>
+                  <Pagination
+                    page={meta.page}
+                    totalPages={meta.totalPages}
+                    onPageChange={(p) => setPage(p)}
+                  />
+                </div>
+              </>
+            )}
+          </div>
         </div>
       </div>
     </div>

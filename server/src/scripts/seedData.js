@@ -53,6 +53,31 @@ module.exports = {
       ]
     },
     {
+  title: 'Green Horizon Estate',
+  description: 'Spacious agricultural land with rich soil quality, suitable for plantations and mixed farming. Located near a village road.',
+  price: 12500000,
+  area: 4,
+  unit: 'acre',
+  address: 'Survey No. 45, Hillview Panchayat',
+  tags: ['road-access', 'fertile-soil'],
+  amenities: ['water', 'electricity', 'fencing'],
+  images: [
+    {
+      url: '/green-horizon-farm.jpg',
+      filename: '/Farmland-Ownership.jpg'
+    },
+    {
+      url: '/plantation-land.jpg',
+      filename: '/Farmland-Ownership.jpg'
+    },
+    {
+      url: '/farmland-view.webp',
+      filename: '/Farmland-Ownership.jpg'
+    }
+  ]
+},
+
+    {
       title: 'Hillside Orchard',
       description: 'Sloping orchard with established fruit trees and small farmhouse.',
       price: 12000000,

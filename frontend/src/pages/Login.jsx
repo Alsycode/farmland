@@ -1,4 +1,3 @@
-// path: src/pages/Login.jsx
 import React, { useState } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { useNavigate, useLocation } from 'react-router-dom';
@@ -22,20 +21,79 @@ export default function Login() {
       await login(email, password);
       navigate(from, { replace: true });
     } catch (error) {
-      const msg = error?.error || error?.message || (error?.response && error.response.data && error.response.data.error) || 'Login failed';
+      const msg =
+        error?.error ||
+        error?.message ||
+        error?.response?.data?.error ||
+        'Login failed';
       setErr(msg);
-    } finally { setLoading(false); }
+    } finally {
+      setLoading(false);
+    }
   }
 
+  const inputClass = `
+    w-full px-4 py-3 rounded-xl text-sm
+    bg-[#eef4ee] text-green-900 placeholder-green-700
+    shadow-[inset_2px_2px_4px_#cfd8cf,inset_-2px_-2px_4px_#ffffff]
+    focus:outline-none
+  `;
+
   return (
-    <div className="max-w-md mx-auto bg-white p-6 rounded shadow">
-      <h2 className="text-xl mb-4">Login</h2>
-      <form onSubmit={submit} className="space-y-3">
-        <div><label className="text-sm block mb-1">Email</label><input value={email} onChange={e=>setEmail(e.target.value)} className="w-full border rounded px-3 py-2" /></div>
-        <div><label className="text-sm block mb-1">Password</label><input type="password" value={password} onChange={e=>setPassword(e.target.value)} className="w-full border rounded px-3 py-2" /></div>
-        {err && <div className="text-red-600">{err}</div>}
-        <div><button disabled={loading} className="w-full bg-indigo-600 text-white px-3 py-2 rounded">{loading ? 'Signing in…' : 'Sign in'}</button></div>
-      </form>
-    </div>
+    <section className="min-h-[70vh] flex items-center justify-center bg-[#eef4ee] px-4">
+      <div
+        className="
+          w-full max-w-md
+          bg-[#eef4ee] rounded-3xl p-8
+          shadow-[8px_8px_16px_#cfd8cf,-8px_-8px_16px_#ffffff]
+        "
+      >
+        <h2 className="text-2xl font-semibold text-green-900 text-center">
+          Welcome Back
+        </h2>
+        <p className="text-sm text-green-700 text-center mt-1">
+          Sign in to continue
+        </p>
+
+        <form onSubmit={submit} className="mt-6 space-y-4">
+          <input
+            type="email"
+            placeholder="Email address"
+            value={email}
+            onChange={e => setEmail(e.target.value)}
+            required
+            className={inputClass}
+          />
+
+          <input
+            type="password"
+            placeholder="Password"
+            value={password}
+            onChange={e => setPassword(e.target.value)}
+            required
+            className={inputClass}
+          />
+
+          {err && (
+            <div className="text-sm text-red-600 text-center">
+              {err}
+            </div>
+          )}
+
+          <button
+            disabled={loading}
+            className="
+              w-full py-3 rounded-xl text-sm font-medium text-white
+              bg-green-600
+              shadow-[3px_3px_6px_#9fbfa2,-3px_-3px_6px_#dff1e2]
+              hover:bg-green-700
+              disabled:opacity-60
+            "
+          >
+            {loading ? 'Signing in…' : 'Sign in'}
+          </button>
+        </form>
+      </div>
+    </section>
   );
 }

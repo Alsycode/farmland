@@ -1,23 +1,30 @@
 import React, { useEffect, useState } from 'react';
-import { useParams, Link } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import propertyService from '../services/propertyService';
+
 import ImageGallery from '../components/ImageGallery';
 import VisitForm from '../components/VisitForm';
-import ShortlistButton from '../components/ShortlistButton';
-import { API_BASE_URL } from '../config/apiConfig';
-import Overview from "../components/Overview"
-import Masterplan from "../components/MasterPlan"
 import AmenitiesSection from '../components/AmenetiesSection';
+import Masterplan from '../components/MasterPlan';
+import Overview from '../components/Overview';
+
+/**
+ * PropertyDetail Page
+ * - Gallery scrolls normally
+ * - Sticky form activates only after gallery
+ * - Left content scrolls freely
+ * - Right-side VisitForm + Call + WhatsApp stay sticky together
+ */
 export default function PropertyDetail() {
   const { id } = useParams();
 
   const [property, setProperty] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [showVisitModal, setShowVisitModal] = useState(false);
 
   useEffect(() => {
     let mounted = true;
+
     async function fetchProperty() {
       try {
         const res = await propertyService.get(id);
@@ -29,174 +36,176 @@ export default function PropertyDetail() {
         if (mounted) setLoading(false);
       }
     }
+
     fetchProperty();
     return () => (mounted = false);
   }, [id]);
 
-  if (loading) return <div>Loading…</div>;
-  if (error) return <div className="text-red-600">{error}</div>;
-  if (!property) return <div>Property not found</div>;
+  if (loading) return <div className="py-20 text-center">Loading…</div>;
+  if (error) return <div className="text-red-600 text-center">{error}</div>;
+  if (!property) return <div className="text-center">Property not found</div>;
 
   const media = [
     ...(property.images || []).map(i => ({ type: 'image', url: i.url })),
-    ...(property.videos || []).map(v => ({ type: 'video', url: v.url }))
+    ...(property.videos || []).map(v => ({ type: 'video', url: v.url })),
   ];
-
-  const ownerPhone = property.owner?.phone || property.contactPhone;
-  const whatsappNumber = "+918891581416";
-  const whatsappLink = whatsappNumber
-    ? `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(
-        `Hi, I'm interested in "${property.title}" (ID: ${id})`
-      )}`
-    : null;
 
   return (
     <>
+      {/* ================= GALLERY (NORMAL SCROLL) ================= */}
       <ImageGallery media={media} />
 
-      
-      
-      <div className='w-full flex  flex-col justify-center items-center'>
-      <div className="bg-white p-6 rounded-xl w-5xl shadow mt-4">
-  {/* TOP ROW */}
-  <div className="flex flex-wrap items-start justify-between gap-6">
- 
-    <div className="flex items-start gap-4">
-  
-      <div className="w-14 h-14 rounded-lg bg-gray-100 flex items-center justify-center text-gray-500 text-sm font-semibold">
-        LOGO
-      </div>
+      {/* ================= PAGE CONTENT ================= */}
+      <div className="bg-[#eef4ee] py-10">
+        <div className="max-w-7xl mx-auto px-4">
 
-      <div>
-        <h2 className="text-xl font-semibold text-gray-900">
-          {property.title}
-        </h2>
-        <p className="text-sm text-gray-600 mt-1">
-          {property.address}
-        </p>
-      </div>
-    </div>
+          <div className="flex gap-8 items-start">
 
-    <div className="flex border border-green-300 rounded-xl overflow-hidden text-sm">
-      <div className="px-5 py-3 border-r">
-        <div className="font-semibold text-gray-900">
-          ₹{property.price?.toLocaleString() || '—'}
-        </div>
-        <div className="text-xs text-green-600 mt-1">
-          Price
-        </div>
-      </div>
+            {/* ================= LEFT COLUMN ================= */}
+            <div className="flex-1 space-y-10">
 
-      <div className="px-5 py-3 border-r">
-        <div className="font-semibold text-gray-900">
-          {property.area} {property.unit}
-        </div>
-        <div className="text-xs text-green-600 mt-1">
-          Plot Area
-        </div>
-      </div>
+              {/* SUMMARY */}
+              <div
+                className="
+                  bg-[#eef4ee] rounded-3xl p-6
+                  shadow-[6px_6px_12px_#cfd8cf,-6px_-6px_12px_#ffffff]
+                "
+              >
+                <h1 className="text-2xl font-semibold text-green-900">
+                  {property.title}
+                </h1>
+                <p className="text-green-700 mt-1">
+                  {property.address}
+                </p>
 
-      <div className="px-5 py-3">
-        <div className="font-semibold text-gray-900">
-          ₹{property.pricePerSqFt || '—'}
-        </div>
-        <div className="text-xs text-green-600 mt-1">
-          Price / Sq.Ft
-        </div>
-      </div>
-    </div>
-  </div>
-
- 
-  <div className="mt-6 flex flex-wrap items-center gap-3">
- 
-    <button
-      onClick={() => setShowVisitModal(true)}
-      className="flex items-center gap-2 px-5 py-2.5 bg-green-600 text-white rounded-lg text-sm font-medium hover:bg-green-700 transition"
-    >
-      📅 Schedule Visit
-    </button>
-
-    {whatsappLink && (
-      <a
-        href={whatsappLink}
-        target="_blank"
-        rel="noreferrer"
-        className="flex items-center gap-2 px-5 py-2.5 bg-yellow-400 text-gray-900 rounded-lg text-sm font-medium hover:bg-yellow-500 transition"
-      >
-        💬 Chat with Seller
-      </a>
-    )}
-
-   
-    <div className="px-5 py-2.5  border-gray-300 rounded-lg text-sm font-medium hover:bg-gray-50 transition">
-      <ShortlistButton propertyId={property._id} />
-    </div>
-
-    <button
-      onClick={() => navigator.share?.({
-        title: property.title,
-        url: window.location.href
-      })}
-      className="p-2.5 border border-gray-300 rounded-lg hover:bg-gray-50 transition"
-      title="Share"
-    >
-      🔗
-    </button>
-  </div>
-</div>
-<div className='w-full max-w-5xl'>
-    <section className="mt-8">
-              <h3 className="text-xl font-semibold mb-4">LOCATION MAP</h3>
-              <div className="bg-white rounded-md p-4 shadow-sm">
-                <iframe
-                  src="https://maps.google.com/maps?q=ramanagara&t=&z=10&ie=UTF8&iwloc=&output=embed"
-                  width="100%"
-                  height="420"
-                  className="rounded"
-                  title="location-map"
-                  style={{ border: 0 }}
-                />
+                <div className="mt-4 flex flex-wrap gap-6 text-sm">
+                  <Stat
+                    label="Price"
+                    value={`₹${property.price?.toLocaleString() || '—'}`}
+                  />
+                  <Stat
+                    label="Area"
+                    value={`${property.area || '—'} ${property.unit || ''}`}
+                  />
+                  <Stat
+                    label="Bedrooms"
+                    value={property.bedrooms || '—'}
+                  />
+                  <Stat
+                    label="Bathrooms"
+                    value={property.bathrooms || '—'}
+                  />
+                </div>
               </div>
-            </section>
-</div>
-   <div className="mt-8 max-w-5xl w-full">
-              {/* If you already have an AmenitiesGrid component you can pass property.amenities to it.
-                  Here we render a full AMENITIES section based on property.amenities array. */}
+
+              {/* OVERVIEW */}
+              <Overview property={property} />
+
+              {/* LOCATION */}
+              <section>
+                <h3 className="text-lg font-semibold text-green-900 mb-3">
+                  Location Map
+                </h3>
+                <div className="rounded-2xl overflow-hidden">
+                  <iframe
+                    src="https://maps.google.com/maps?q=ramanagara&t=&z=10&ie=UTF8&iwloc=&output=embed"
+                    width="100%"
+                    height="420"
+                    style={{ border: 0 }}
+                    title="map"
+                  />
+                </div>
+              </section>
+
+              {/* AMENITIES */}
               <AmenitiesSection items={property.amenities || []} />
+
+              {/* MASTER PLAN */}
+              <Masterplan src={property.masterPlanImage} />
+
             </div>
 
-             <div className="mt-10 max-w-5xl w-full">
-                          <Masterplan src={property.masterPlanImage} />
-                        </div>
-      </div>
-      
+            {/* ================= RIGHT COLUMN (STICKY) ================= */}
+            <aside className="hidden lg:block w-[360px]">
+              {/* Sticky starts ONLY after gallery */}
+              <div className="sticky top-24">
+                <ContactCard property={property} />
+              </div>
+            </aside>
 
-
-
-
-      {/* VISIT MODAL */}
-      {showVisitModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
-          <div className="bg-white w-full max-w-md p-5 rounded-lg relative">
-            <button
-              onClick={() => setShowVisitModal(false)}
-              className="absolute top-3 right-3 text-gray-500"
-            >
-              ✕
-            </button>
-
-            <h3 className="text-lg font-semibold mb-3">
-              Schedule a Visit
-            </h3>
-
-            <VisitForm
-              propertyId={property._id}
-              onSuccess={() => setShowVisitModal(false)}
-            />
           </div>
         </div>
-      )}
+      </div>
     </>
+  );
+}
+
+/* ================= REUSABLE COMPONENTS ================= */
+
+function Stat({ label, value }) {
+  return (
+    <div>
+      <div className="font-semibold text-green-900">{value}</div>
+      <div className="text-xs text-green-700">{label}</div>
+    </div>
+  );
+}
+
+function ContactCard({ property }) {
+  const whatsappLink = `https://wa.me/918891581416?text=${encodeURIComponent(
+    `Hi, I'm interested in "${property.title}"`
+  )}`;
+
+  return (
+    <div
+      className="
+        bg-[#eef4ee] rounded-3xl p-5 space-y-5
+        border border-green-200
+        shadow-[6px_6px_12px_#cfd8cf,-6px_-6px_12px_#ffffff]
+      "
+    >
+      {/* AGENT */}
+      <div className="flex items-center gap-3">
+        <div className="w-12 h-12 rounded-xl bg-green-200 flex items-center justify-center">
+          🏡
+        </div>
+        <div>
+          <div className="font-semibold text-green-900">
+            Modern House Real Estate
+          </div>
+          <div className="text-sm text-green-700 hover:underline cursor-pointer">
+            View Listings
+          </div>
+        </div>
+      </div>
+
+      {/* VISIT FORM */}
+      <VisitForm propertyId={property._id} />
+
+      {/* ACTION BUTTONS */}
+      <div className="grid grid-cols-2 gap-2 pt-2">
+        <a
+          href="tel:+918891581416"
+          className="
+            text-center py-2.5 rounded-xl
+            border border-green-600 text-green-800 font-medium
+          "
+        >
+          Call
+        </a>
+
+        <a
+          href={whatsappLink}
+          target="_blank"
+          rel="noreferrer"
+          className="
+            text-center py-2.5 rounded-xl
+            bg-green-600 text-white font-medium
+          "
+        >
+          WhatsApp
+        </a>
+      </div>
+    </div>
   );
 }

@@ -20,7 +20,7 @@ export default function ImageGallery({ media = [] }) {
   }
 
   return (
-    <div className="space-y-3">
+    <div className="space-y-3 ">
       <div className="relative">
         <div className="w-full h-80 bg-black/5 flex items-center justify-center overflow-hidden rounded">
           {item.type === 'video' ? (

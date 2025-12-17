@@ -1,67 +1,176 @@
-import React from "react";
-import { Link } from "react-router-dom";
-
-/**
- * Navbar
- * - Visual alignment with Homepage B
- * - Links, routing, logic preserved
- */
+// 🌿 Nature Neumorphism Responsive Navbar
+import React, { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { useAuth } from "../context/AuthContext";
+import { Menu, X } from "lucide-react";
 
 export default function Navbar() {
-  return (
-    <header className="sticky top-0 z-40 bg-white shadow-sm">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-12">
-        <div className="flex items-center justify-between h-16">
+  const { user, loading, logout } = useAuth();
+  const navigate = useNavigate();
+  const [open, setOpen] = useState(false);
 
+  if (loading) return null;
+
+  const navLink =
+    "block py-2 text-green-800 hover:text-green-600 font-medium";
+
+  return (
+    <header className="sticky top-0 z-40 bg-[#eef4ee]">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6">
+
+        {/* MAIN BAR */}
+        <div
+          className="
+            mt-4 h-16 flex items-center justify-between
+            rounded-2xl px-5
+            bg-[#eef4ee]
+            shadow-[6px_6px_12px_#cfd8cf,-6px_-6px_12px_#ffffff]
+          "
+        >
           {/* LOGO */}
-          <Link to="/" className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-full bg-primary-50 flex items-center justify-center">
-              <span className="font-bold text-primary-600">F</span>
+          <Link to="/" className="flex items-center gap-3 text-green-800">
+            <div className="w-10 h-10 rounded-full bg-green-200 flex items-center justify-center">
+              🌾
             </div>
-            <div className="hidden sm:block">
-              <div className="font-semibold text-lg leading-none">
-                MyFarmland
-              </div>
-              <div className="text-xs text-gray-500 -mt-0.5">
-                Verified land listings
-              </div>
+            <div>
+              <div className="font-bold leading-tight">MyFarmland</div>
+              <div className="text-xs text-green-600">Verified land</div>
             </div>
           </Link>
 
-          {/* NAV LINKS */}
-          <nav className="hidden md:flex items-center gap-8 font-medium text-gray-700">
-            <Link to="/" className="hover:text-primary-600">
-              Home
-            </Link>
-            <Link to="/search" className="hover:text-primary-600">
-              Search
-            </Link>
-            <Link to="/blogs" className="hover:text-primary-600">
-              Blogs
-            </Link>
-            <Link to="/contact" className="hover:text-primary-600">
-              Contact
-            </Link>
+          {/* DESKTOP NAV */}
+          <nav className="hidden md:flex gap-8">
+            <Link className="text-green-800 hover:text-green-600" to="/">Home</Link>
+            <Link className="text-green-800 hover:text-green-600" to="/search">Search</Link>
+            <Link className="text-green-800 hover:text-green-600" to="/blogs">Blogs</Link>
+            <Link className="text-green-800 hover:text-green-600" to="/contact">Contact</Link>
           </nav>
 
-          {/* ACTIONS */}
-          <div className="flex items-center gap-3">
-            <Link
-              to="/login"
-              className="hidden sm:inline-flex items-center px-4 py-2 rounded-full border text-sm font-medium hover:bg-gray-50"
-            >
-              Login
-            </Link>
+          {/* DESKTOP ACTIONS */}
+          <div className="hidden md:flex items-center gap-3">
+            {!user && (
+              <Link
+                to="/login"
+                className="
+                  px-4 py-2 rounded-full text-sm text-green-800
+                  shadow-[inset_3px_3px_6px_#cfd8cf,inset_-3px_-3px_6px_#ffffff]
+                "
+              >
+                Login
+              </Link>
+            )}
+
+            {user && (
+              <>
+                <button
+                  onClick={() => navigate("/dashboard")}
+                  className="
+                    w-10 h-10 rounded-full overflow-hidden
+                    shadow-[2px_2px_4px_#cfd8cf,-2px_-2px_4px_#ffffff]
+                  "
+                >
+                  <img src="/useravatar.webp" alt="User" />
+                </button>
+
+                <button
+                  onClick={logout}
+                  className="px-4 py-2 rounded-full text-sm text-green-800 bg-green-200"
+                >
+                  Logout
+                </button>
+              </>
+            )}
 
             <Link
               to="/search"
-              className="inline-flex items-center px-4 py-2 rounded-lg bg-gradient-to-r from-[#cd4a6c] to-[#92332e] text-white text-sm font-semibold shadow-sm hover:scale-[0.98] transition"
+              className="px-5 py-2 rounded-full bg-green-700 text-white text-sm font-semibold"
             >
               Explore
             </Link>
           </div>
 
+          {/* MOBILE TOGGLE */}
+          <button
+            onClick={() => setOpen(!open)}
+            className="
+              md:hidden w-10 h-10 rounded-full
+              flex items-center justify-center
+              bg-[#eef4ee]
+              shadow-[3px_3px_6px_#cfd8cf,-3px_-3px_6px_#ffffff]
+            "
+          >
+            {open ? <X size={18} /> : <Menu size={18} />}
+          </button>
         </div>
+
+        {/* MOBILE MENU */}
+        {open && (
+          <div
+            className="
+              mt-4 rounded-2xl p-5
+              bg-[#eef4ee]
+              shadow-[6px_6px_12px_#cfd8cf,-6px_-6px_12px_#ffffff]
+              md:hidden
+            "
+          >
+            <nav className="space-y-3">
+              <Link onClick={() => setOpen(false)} className={navLink} to="/">Home</Link>
+              <Link onClick={() => setOpen(false)} className={navLink} to="/search">Search</Link>
+              <Link onClick={() => setOpen(false)} className={navLink} to="/blogs">Blogs</Link>
+              <Link onClick={() => setOpen(false)} className={navLink} to="/contact">Contact</Link>
+            </nav>
+
+            <div className="mt-5 space-y-3">
+              {!user && (
+                <Link
+                  onClick={() => setOpen(false)}
+                  to="/login"
+                  className="
+                    block text-center px-4 py-2 rounded-xl text-green-800
+                    shadow-[inset_3px_3px_6px_#cfd8cf,inset_-3px_-3px_6px_#ffffff]
+                  "
+                >
+                  Login
+                </Link>
+              )}
+
+              {user && (
+                <>
+                  <button
+                    onClick={() => {
+                      setOpen(false);
+                      navigate("/dashboard");
+                    }}
+                    className="
+                      w-full px-4 py-2 rounded-xl text-green-800
+                      shadow-[inset_3px_3px_6px_#cfd8cf,inset_-3px_-3px_6px_#ffffff]
+                    "
+                  >
+                    Dashboard
+                  </button>
+
+                  <button
+                    onClick={() => {
+                      setOpen(false);
+                      logout();
+                    }}
+                    className="w-full px-4 py-2 rounded-xl bg-green-200 text-green-800"
+                  >
+                    Logout
+                  </button>
+                </>
+              )}
+
+              <Link
+                onClick={() => setOpen(false)}
+                to="/search"
+                className="block text-center px-4 py-2 rounded-xl bg-green-700 text-white font-semibold"
+              >
+                Explore
+              </Link>
+            </div>
+          </div>
+        )}
       </div>
     </header>
   );
