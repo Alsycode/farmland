@@ -6,6 +6,7 @@
   "scripts": {
     "start": "node src/index.js",
     "dev": "nodemon src/index.js",
+    "build": "npm install", 
     "lint": "eslint . --ext .js",
     "test": "jest --runInBand --detectOpenHandles",
     "seed": "node src/scripts/seed.js"
@@ -28,7 +29,7 @@
     "cookie-parser": "^1.4.6",
     "cors": "^2.8.5",
     "dotenv": "^16.3.1",
-    "express": "^4.18.2",
+    "express": "^4.182",
     "express-rate-limit": "^6.8.0",
     "express-validator": "^7.0.1",
     "helmet": "^7.0.0",
