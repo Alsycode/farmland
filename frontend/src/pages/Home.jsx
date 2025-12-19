@@ -114,7 +114,7 @@ export default function Home() {
         {/* ================= TRENDING ================= */}
         <PropertySection
           title="Trending Properties"
-          link="/search?trending=true"s
+          link="/search?trending=true"
           items={trending}
           loading={loading}
           error={error}

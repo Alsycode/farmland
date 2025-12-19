@@ -1,4 +1,3 @@
-// path: src/components/TestimonialCarousel.jsx
 import React, { useState, useEffect } from "react";
 
 const sample = [
@@ -36,21 +35,23 @@ export default function TestimonialCarousel({
   const cur = items[idx];
 
   return (
-    <section className="w-full flex justify-center">
+    <section className="w-full">
       <div
         className="
-          w-full max-w-3xl
+          w-full
+          sm:max-w-3xl sm:mx-auto
           bg-[#eef4ee]
-          rounded-3xl
-          px-6 py-10 sm:px-10
-          shadow-[8px_8px_16px_#cfd8cf,-8px_-8px_16px_#ffffff]
+          rounded-none sm:rounded-3xl
+          px-5 py-8
+          sm:px-10 sm:py-10
           text-center
+          shadow-none sm:shadow-[8px_8px_16px_#cfd8cf,-8px_-8px_16px_#ffffff]
         "
       >
         {/* Quote */}
         <p
           className="
-            text-lg sm:text-xl md:text-2xl
+            text-base sm:text-lg md:text-xl lg:text-2xl
             italic text-green-900
             leading-relaxed
           "
@@ -59,22 +60,28 @@ export default function TestimonialCarousel({
         </p>
 
         {/* Author */}
-        <div className="mt-6 text-sm sm:text-base text-green-700 font-medium">
+        <div
+          className="
+            mt-5
+            text-xs sm:text-sm md:text-base
+            text-green-700 font-medium
+          "
+        >
           — {cur.author}
         </div>
 
         {/* Dots */}
-        <div className="flex justify-center gap-3 mt-8">
+        <div className="flex justify-center gap-3 mt-7">
           {items.map((_, i) => (
             <button
               key={i}
-              aria-label={`Go to testimonial ${i + 1}`}
               onClick={() => setIdx(i)}
+              aria-label={`Go to testimonial ${i + 1}`}
               className={`
-                w-3 h-3 rounded-full transition-all
+                w-3 h-3 rounded-full transition-all duration-300
                 ${
                   i === idx
-                    ? "bg-green-600 scale-125 shadow-[2px_2px_4px_#9fbfa2,-2px_-2px_4px_#ffffff]"
+                    ? "bg-green-600 scale-125"
                     : "bg-green-300"
                 }
               `}

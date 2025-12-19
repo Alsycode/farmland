@@ -125,6 +125,8 @@ export default function Navbar() {
               <Link onClick={() => setOpen(false)} className={navLink} to="/search">Search</Link>
               <Link onClick={() => setOpen(false)} className={navLink} to="/blogs">Blogs</Link>
               <Link onClick={() => setOpen(false)} className={navLink} to="/contact">Contact</Link>
+              <Link onClick={() => setOpen(false)} className={navLink} to="/terms-and-conditions">Terms and Conditions</Link>
+              <Link onClick={() => setOpen(false)} className={navLink} to="/about">About us</Link>
             </nav>
 
             <div className="mt-5 space-y-3">
