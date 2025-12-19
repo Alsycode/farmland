@@ -34,18 +34,33 @@ function createApp() {
   // // CORS
   // app.use(cors({ origin: true, credentials: true }));
 app.use(cors({
-  origin: [
-    'http://localhost:5173',
-     'http://localhost:5174',  
-      'http://localhost:5175',    // Vite dev server
-    'http://127.0.0.1:5173',     // same for IPv4 localhost
-    'http://localhost:3000',
-    'https://farmland-edd9.vercel.app',
+  origin: (origin, callback) => {
+    // Allow requests with no origin (mobile apps, etc.)
+    if (!origin) return callback(null, true);
     
-  ],
+    const allowedOrigins = [
+      'http://localhost:5173',
+      'http://localhost:5174', 
+      'http://localhost:5175',
+      'http://127.0.0.1:5173',
+      'http://localhost:3000',
+      'https://farmland-edd9.vercel.app',
+      'https://farmland-ym5b.onrender.com',  // ✅ Add Render URL
+      'https://*.vercel.app',                // ✅ Wildcard for Vercel previews
+      'https://*.onrender.com'               // ✅ Wildcard for Render previews
+    ];
+    
+    if (allowedOrigins.includes(origin) || 
+        allowedOrigins.some(allowed => origin.match(new RegExp(allowed.replace(/\*/g, '.*'))))) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
   credentials: true,
   optionsSuccessStatus: 200
 }));
+
   // Logging
   app.use(requestLogger);
 
