@@ -11,13 +11,11 @@ export default function Navbar() {
 
   if (loading) return null;
 
-  const navLink =
-    "block py-2 text-green-800 hover:text-green-600 font-medium";
+  const navLink = "block py-2 text-green-800 hover:text-green-600 font-medium";
 
   return (
     <header className="sticky top-0 z-40 bg-[#eef4ee]">
       <div className="max-w-7xl mx-auto px-4 sm:px-6">
-
         {/* MAIN BAR */}
         <div
           className="
@@ -44,6 +42,8 @@ export default function Navbar() {
             <Link className="text-green-800 hover:text-green-600" to="/search">Search</Link>
             <Link className="text-green-800 hover:text-green-600" to="/blogs">Blogs</Link>
             <Link className="text-green-800 hover:text-green-600" to="/contact">Contact</Link>
+            <Link className="text-green-800 hover:text-green-600" to="/terms-and-conditions">Terms and Conditions</Link>
+            <Link className="text-green-800 hover:text-green-600" to="/about">About us</Link>
           </nav>
 
           {/* DESKTOP ACTIONS */}
@@ -53,7 +53,7 @@ export default function Navbar() {
                 to="/login"
                 className="
                   px-4 py-2 rounded-full text-sm text-green-800
-                  shadow-[inset_3px_3px_6px_#cfd8cf,inset_-3px_-3px_6px_#ffffff]
+                  shadow-[6px_6px_12px_#cfd8cf,-6px_-6px_12px_#ffffff]
                 "
               >
                 Login
@@ -66,7 +66,7 @@ export default function Navbar() {
                   onClick={() => navigate("/dashboard")}
                   className="
                     w-10 h-10 rounded-full overflow-hidden
-                    shadow-[2px_2px_4px_#cfd8cf,-2px_-2px_4px_#ffffff]
+                    shadow-[3px_3px_6px_#cfd8cf,-3px_-3px_6px_#ffffff]
                   "
                 >
                   <img src="/useravatar.webp" alt="User" />
@@ -74,7 +74,11 @@ export default function Navbar() {
 
                 <button
                   onClick={logout}
-                  className="px-4 py-2 rounded-full text-sm text-green-800 bg-green-200"
+                  className="
+                    px-4 py-2 rounded-full text-sm text-green-800 
+                    shadow-[6px_6px_12px_#cfd8cf,-6px_-6px_12px_#ffffff]
+                    bg-green-50
+                  "
                 >
                   Logout
                 </button>
@@ -83,7 +87,10 @@ export default function Navbar() {
 
             <Link
               to="/search"
-              className="px-5 py-2 rounded-full bg-green-700 text-white text-sm font-semibold"
+              className="
+                px-5 py-2 rounded-full bg-green-700 text-white text-sm font-semibold
+                shadow-[6px_6px_12px_rgba(34,197,94,0.4),-6px_-6px_12px_rgba(255,255,255,0.8)]
+              "
             >
               Explore
             </Link>
@@ -127,7 +134,7 @@ export default function Navbar() {
                   to="/login"
                   className="
                     block text-center px-4 py-2 rounded-xl text-green-800
-                    shadow-[inset_3px_3px_6px_#cfd8cf,inset_-3px_-3px_6px_#ffffff]
+                    shadow-[6px_6px_12px_#cfd8cf,-6px_-6px_12px_#ffffff]
                   "
                 >
                   Login
@@ -143,7 +150,7 @@ export default function Navbar() {
                     }}
                     className="
                       w-full px-4 py-2 rounded-xl text-green-800
-                      shadow-[inset_3px_3px_6px_#cfd8cf,inset_-3px_-3px_6px_#ffffff]
+                      shadow-[6px_6px_12px_#cfd8cf,-6px_-6px_12px_#ffffff]
                     "
                   >
                     Dashboard
@@ -154,7 +161,11 @@ export default function Navbar() {
                       setOpen(false);
                       logout();
                     }}
-                    className="w-full px-4 py-2 rounded-xl bg-green-200 text-green-800"
+                    className="
+                      w-full px-4 py-2 rounded-xl text-green-800 
+                      shadow-[6px_6px_12px_#cfd8cf,-6px_-6px_12px_#ffffff]
+                      bg-green-50
+                    "
                   >
                     Logout
                   </button>
@@ -164,7 +175,10 @@ export default function Navbar() {
               <Link
                 onClick={() => setOpen(false)}
                 to="/search"
-                className="block text-center px-4 py-2 rounded-xl bg-green-700 text-white font-semibold"
+                className="
+                  block text-center px-4 py-2 rounded-xl bg-green-700 text-white font-semibold
+                  shadow-[6px_6px_12px_rgba(34,197,94,0.4),-6px_-6px_12px_rgba(255,255,255,0.8)]
+                "
               >
                 Explore
               </Link>

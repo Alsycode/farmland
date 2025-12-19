@@ -1,6 +1,17 @@
 import React from "react";
+import {
+  Home,
+  Ruler,
+  Fence,
+  BadgePercent,
+  CheckCircle,
+  Leaf,
+  LayoutGrid,
+  CalendarCheck,
+  Repeat
+} from "lucide-react";
 
-function Item({ icon, label, value }) {
+function Item({ icon: Icon, label, value }) {
   return (
     <div
       className="
@@ -17,25 +28,7 @@ function Item({ icon, label, value }) {
           shadow-[inset_2px_2px_4px_#cfd8cf,inset_-2px_-2px_4px_#ffffff]
         "
       >
-        {icon || (
-          <svg
-            width="20"
-            height="20"
-            viewBox="0 0 24 24"
-            fill="none"
-            className="opacity-80"
-          >
-            <rect
-              x="3"
-              y="3"
-              width="18"
-              height="18"
-              rx="3"
-              stroke="currentColor"
-              strokeWidth="1.2"
-            />
-          </svg>
-        )}
+        {Icon && <Icon size={20} strokeWidth={1.6} />}
       </div>
 
       {/* Text */}
@@ -51,18 +44,56 @@ function Item({ icon, label, value }) {
   );
 }
 
+
 export default function OverviewGrid({ data = {} }) {
-  const items = [
-    { label: "PROPERTY TYPE", value: data.propertyType || "Farmland" },
-    { label: "PROJECT AREA", value: data.projectArea || "—" },
-    { label: "BOUNDARY WALL", value: data.boundaryWall ? "Yes" : "No" },
-    { label: "PRICE NEGOTIABLE", value: data.priceNegotiable ? "Yes" : "No" },
-    { label: "AVAILABILITY STATUS", value: data.availability || "Available" },
-    { label: "MANAGED FARMS", value: data.managedFarms ? "Yes" : "No" },
-    { label: "OPEN SIDES COUNT", value: data.openSides || "—" },
-    { label: "FREE YEARS OF MAINTENANCE", value: data.maintenanceYears || "—" },
-    { label: "TRANSACTION TYPE", value: data.transactionType || "New" },
-  ];
+const items = [
+  {
+    label: "PROPERTY TYPE",
+    value: data.propertyType || "Farmland",
+    icon: Home,
+  },
+  {
+    label: "PROJECT AREA",
+    value: data.projectArea || "—",
+    icon: Ruler,
+  },
+  {
+    label: "BOUNDARY WALL",
+    value: data.boundaryWall ? "Yes" : "No",
+    icon: Fence,
+  },
+  {
+    label: "PRICE NEGOTIABLE",
+    value: data.priceNegotiable ? "Yes" : "No",
+    icon: BadgePercent,
+  },
+  {
+    label: "AVAILABILITY STATUS",
+    value: data.availability || "Available",
+    icon: CheckCircle,
+  },
+  {
+    label: "MANAGED FARMS",
+    value: data.managedFarms ? "Yes" : "No",
+    icon: Leaf,
+  },
+  {
+    label: "OPEN SIDES COUNT",
+    value: data.openSides || "—",
+    icon: LayoutGrid,
+  },
+  {
+    label: "FREE YEARS OF MAINTENANCE",
+    value: data.maintenanceYears || "—",
+    icon: CalendarCheck,
+  },
+  {
+    label: "TRANSACTION TYPE",
+    value: data.transactionType || "New",
+    icon: Repeat,
+  },
+];
+
 
   return (
     <section
@@ -76,11 +107,17 @@ export default function OverviewGrid({ data = {} }) {
         Overview
       </h2>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
-        {items.map((it) => (
-          <Item key={it.label} icon={null} label={it.label} value={it.value} />
-        ))}
-      </div>
+   <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+  {items.map((it) => (
+    <Item
+      key={it.label}
+      icon={it.icon}
+      label={it.label}
+      value={it.value}
+    />
+  ))}
+</div>
+
     </section>
   );
 }

@@ -23,11 +23,16 @@ const BlogSchema = new mongoose.Schema(
 
     content: {
       type: String,
-      required: true,
+      required: true, // HTML content
     },
 
     featuredImage: {
       type: String,
+    },
+
+    category: {
+      type: String,
+      default: "General",
     },
 
     tags: [
@@ -40,6 +45,15 @@ const BlogSchema = new mongoose.Schema(
     author: {
       type: String,
       default: "Farmland Team",
+    },
+
+    readingTime: {
+      type: String, // "5 Min Read"
+    },
+
+    views: {
+      type: Number,
+      default: 0,
     },
 
     published: {
@@ -58,7 +72,7 @@ const BlogSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-// Auto-generate slug from title
+// Auto-generate slug
 BlogSchema.pre('save', function (next) {
   if (this.isModified('title')) {
     this.slug = slugify(this.title, { lower: true, strict: true });

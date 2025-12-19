@@ -12,10 +12,11 @@ import Profile from './pages/Profile';
 import BlogList from './pages/BlogList';
 import BlogDetail from './pages/BlogDetail';
 import Contact from './pages/Contact';
-import About from './pages/About';
+
 import ExploreMap from './pages/ExploreMap';
 import NotFound from './pages/NotFound';
-
+import TermsAndConditions from './pages/TermsAndConditions';
+import About from "./pages/About";
 /**
  * Public routing per SRS 4.1
  */
@@ -23,6 +24,7 @@ export default function App() {
   return (
     <Routes>
       <Route path="/" element={<Layout />}>
+      <Route path="/about" element={<About />} />
         <Route index element={<Home />} />
         <Route path="search" element={<Search />} />
         <Route path="explore" element={<ExploreMap />} />
@@ -36,6 +38,7 @@ export default function App() {
         <Route path="contact" element={<Contact />} />
         <Route path="about" element={<About />} />
         <Route path="*" element={<NotFound />} />
+        <Route path="/terms-and-conditions" element={<TermsAndConditions />} />
       </Route>
     </Routes>
   );

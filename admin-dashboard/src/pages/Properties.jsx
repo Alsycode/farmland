@@ -220,4 +220,3 @@ export default function Properties() {
     </div>
   );
 }
-s
