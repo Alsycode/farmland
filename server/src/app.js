@@ -40,7 +40,8 @@ app.use(cors({
       'http://localhost:5175',    // Vite dev server
     'http://127.0.0.1:5173',     // same for IPv4 localhost
     'http://localhost:3000',
-    'https://farmland-edd9.vercel.app/',
+    'https://farmland-edd9.vercel.app',
+    
   ],
   credentials: true,
   optionsSuccessStatus: 200
