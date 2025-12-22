@@ -86,36 +86,105 @@ export default function Messages() {
     }
   }
 
+  /* ================= neumorphism helpers ================= */
+
+  const card =
+    "bg-[#1e2229] rounded-2xl p-5 " +
+    "shadow-[6px_6px_12px_#14161a,-6px_-6px_12px_#242a32]";
+
+  const inset =
+    "bg-[#1e2229] rounded-xl px-3 py-2 text-gray-200 " +
+    "shadow-[inset_4px_4px_8px_#14161a,inset_-4px_-4px_8px_#242a32] " +
+    "focus:outline-none";
+
+  const btn =
+    "px-3 py-2 rounded-xl text-sm transition " +
+    "shadow-[4px_4px_8px_#14161a,-4px_-4px_8px_#242a32] " +
+    "active:shadow-[inset_4px_4px_8px_#14161a,inset_-4px_-4px_8px_#242a32]";
+
+  const label = "text-xs text-gray-400 mb-1 block";
+
   return (
-    <div>
-      <div className="flex items-center justify-between mb-4">
+    <div className="text-gray-200 space-y-6">
+      {/* Header */}
+      <div className="flex items-center justify-between">
         <h2 className="text-2xl font-semibold">Messages</h2>
-        <div>
-          <button onClick={() => setBox('inbox')} className={`px-3 py-1 rounded ${box === 'inbox' ? 'bg-indigo-600 text-white' : 'bg-gray-100'}`}>Inbox</button>
-          <button onClick={() => setBox('sent')} className={`ml-2 px-3 py-1 rounded ${box === 'sent' ? 'bg-indigo-600 text-white' : 'bg-gray-100'}`}>Sent</button>
+        <div className="flex gap-2">
+          <button
+            onClick={() => setBox('inbox')}
+            className={
+              btn +
+              (box === 'inbox'
+                ? ' text-indigo-400'
+                : ' text-gray-400')
+            }
+          >
+            Inbox
+          </button>
+          <button
+            onClick={() => setBox('sent')}
+            className={
+              btn +
+              (box === 'sent'
+                ? ' text-indigo-400'
+                : ' text-gray-400')
+            }
+          >
+            Sent
+          </button>
         </div>
       </div>
 
-      <div className="grid grid-cols-3 gap-4 mb-4">
-        <div className="col-span-2 bg-white p-4 rounded shadow">
+      {/* Layout */}
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        {/* Message list */}
+        <div className={"lg:col-span-2 " + card}>
           {loading ? (
-            <div className="text-gray-500">Loading…</div>
+            <div className="text-gray-400">Loading…</div>
           ) : items.length === 0 ? (
-            <div className="text-gray-500">No messages</div>
+            <div className="text-gray-400">No messages</div>
           ) : (
-            <ul className="space-y-2">
-              {items.map(m => (
-                <li key={m._id} className="p-3 border rounded">
-                  <div className="flex justify-between items-start">
-                    <div>
-                      <div className="font-medium">{m.subject || '(no subject)'}</div>
-                      <div className="text-sm text-gray-500">From: {m.from?.name || m.from?.email} — To: {m.to?.name || m.to?.email}</div>
-                      <div className="mt-2">{m.content}</div>
-                      <div className="text-xs text-gray-400 mt-2">{new Date(m.createdAt).toLocaleString()}</div>
+            <ul className="space-y-4">
+              {items.map((m) => (
+                <li
+                  key={m._id}
+                  className={
+                    "rounded-xl p-4 " +
+                    "shadow-[inset_4px_4px_8px_#14161a,inset_-4px_-4px_8px_#242a32]"
+                  }
+                >
+                  <div className="flex justify-between gap-4">
+                    <div className="space-y-1">
+                      <div className="font-medium">
+                        {m.subject || '(no subject)'}
+                      </div>
+                      <div className="text-xs text-gray-400">
+                        From: {m.from?.name || m.from?.email} — To:{' '}
+                        {m.to?.name || m.to?.email}
+                      </div>
+                      <div className="text-sm mt-2">
+                        {m.content}
+                      </div>
+                      <div className="text-xs text-gray-500 mt-2">
+                        {new Date(m.createdAt).toLocaleString()}
+                      </div>
                     </div>
-                    <div className="flex flex-col gap-2 ml-4">
-                      {!m.read && box === 'inbox' && <button onClick={() => markRead(m._id)} className="px-2 py-1 bg-green-100 rounded">Mark read</button>}
-                      <button onClick={() => removeMessage(m._id)} className="px-2 py-1 bg-red-100 rounded text-red-600">Delete</button>
+
+                    <div className="flex flex-col gap-2">
+                      {!m.read && box === 'inbox' && (
+                        <button
+                          onClick={() => markRead(m._id)}
+                          className={btn + " text-green-400"}
+                        >
+                          Mark read
+                        </button>
+                      )}
+                      <button
+                        onClick={() => removeMessage(m._id)}
+                        className={btn + " text-red-400"}
+                      >
+                        Delete
+                      </button>
                     </div>
                   </div>
                 </li>
@@ -124,28 +193,55 @@ export default function Messages() {
           )}
         </div>
 
-        <div className="bg-white p-4 rounded shadow">
-          <h3 className="font-semibold mb-2">New message</h3>
-          <form onSubmit={sendMessage} className="space-y-2">
+        {/* New message */}
+        <div className={card}>
+          <h3 className="font-semibold mb-4">New message</h3>
+          <form onSubmit={sendMessage} className="space-y-4">
             <div>
-              <label className="text-sm block mb-1">To user id (optional)</label>
-              <input value={recipientId} onChange={(e) => setRecipientId(e.target.value)} className="w-full border rounded px-2 py-1" placeholder="User ObjectId" />
+              <label className={label}>To user id (optional)</label>
+              <input
+                value={recipientId}
+                onChange={(e) => setRecipientId(e.target.value)}
+                className={inset + " w-full"}
+                placeholder="User ObjectId"
+              />
             </div>
+
             <div>
-              <label className="text-sm block mb-1">Or property id (optional)</label>
-              <input value={propertyId} onChange={(e) => setPropertyId(e.target.value)} className="w-full border rounded px-2 py-1" placeholder="Property ObjectId" />
+              <label className={label}>Or property id (optional)</label>
+              <input
+                value={propertyId}
+                onChange={(e) => setPropertyId(e.target.value)}
+                className={inset + " w-full"}
+                placeholder="Property ObjectId"
+              />
             </div>
+
             <div>
-              <label className="text-sm block mb-1">Subject</label>
-              <input value={subject} onChange={(e) => setSubject(e.target.value)} className="w-full border rounded px-2 py-1" />
+              <label className={label}>Subject</label>
+              <input
+                value={subject}
+                onChange={(e) => setSubject(e.target.value)}
+                className={inset + " w-full"}
+              />
             </div>
+
             <div>
-              <label className="text-sm block mb-1">Content</label>
-              <textarea value={content} onChange={(e) => setContent(e.target.value)} className="w-full border rounded px-2 py-1" rows={4} />
+              <label className={label}>Content</label>
+              <textarea
+                value={content}
+                onChange={(e) => setContent(e.target.value)}
+                rows={4}
+                className={inset + " w-full resize-none"}
+              />
             </div>
-            <div>
-              <button type="submit" className="px-3 py-1 bg-indigo-600 text-white rounded">Send</button>
-            </div>
+
+            <button
+              type="submit"
+              className={btn + " text-indigo-400"}
+            >
+              Send
+            </button>
           </form>
         </div>
       </div>

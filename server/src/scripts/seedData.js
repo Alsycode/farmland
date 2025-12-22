@@ -132,154 +132,196 @@ properties: [
       price: 8500000,
       area: 2.5,
       unit: 'acre',
-      address: 'Plot 12, Green Valley',
+      address: 'Green Valley, Mandya District, Karnataka',
+      location: {
+        type: 'Point',
+        coordinates: [76.894684, 12.523731] // [lng, lat] - Mandya District [web:1]
+      },
       listingType: ['featured', 'trending'],
       tags: ['irrigated', 'organic'],
-      amenities: ['water', 'electricity', 'road'],
-      images: [
-        { url: '/Farmland-Ownership.jpg', filename: 'Farmland-Ownership.jpg' },
-        { url: '/Farmland-Ownership.jpg', filename: 'Agriculture-Land-Farmland-Market-Page.jpg' },
-        { url: '/Farmland-Ownership.jpg', filename: 'thecabin@greensleeves.webp' }
-      ]
+      amenities: ['water', 'electricity', 'road', 'fencing'],
+      status: 'published',
+      images: [{ url: '/Farmland-Ownership.jpg', filename: 'Farmland-Ownership.jpg' }]
     },
 
     {
       title: 'Green Horizon Estate',
-      description: 'Spacious agricultural land with rich soil quality, suitable for plantations and mixed farming.',
+      description: 'Spacious agricultural land with fertile soil and fenced boundaries.',
       price: 12500000,
       area: 4,
       unit: 'acre',
-      address: 'Survey No. 45, Hillview Panchayat',
+      address: 'Hillview Panchayat, Chikkaballapur',
+      location: {
+        type: 'Point',
+        coordinates: [77.730401, 13.42608] // [lng, lat] - Chikkaballapur [web:6]
+      },
       listingType: ['featured'],
-      tags: ['road-access', 'fertile-soil'],
-      amenities: ['water', 'electricity', 'fencing'],
-      images: [
-        { url: '/Farmland-Ownership.jpg', filename: 'Farmland-Ownership.jpg' },
-        { url: '/Farmland-Ownership.jpg', filename: 'Farmland-Ownership.jpg' },
-        { url: '/Farmland-Ownership.jpg', filename: 'Farmland-Ownership.jpg' }
-      ]
+      tags: ['fertile-soil'],
+      amenities: ['water', 'electricity', 'road', 'fencing'],
+      status: 'published',
+      images: [{ url: '/Farmland-Ownership.jpg' }]
     },
 
     {
       title: 'Hillside Orchard',
-      description: 'Sloping orchard with established fruit trees and a small farmhouse.',
+      description: 'Established orchard land with natural slope and internal fencing.',
       price: 12000000,
       area: 3.2,
       unit: 'acre',
-      address: 'Hillside Estate, Sector 7',
+      address: 'Hillside Estate, Ananthapur',
+      location: {
+        type: 'Point',
+        coordinates: [77.595406, 14.685564] // [lng, lat] - Anantapur [web:15]
+      },
       listingType: ['trending'],
       tags: ['orchard'],
-      amenities: ['water', 'fenced'],
-      images: [
-        { url: '/Farmland-Ownership.jpg', filename: 'Agriculture-Land-Farmland-Market-Page.jpg' },
-        { url: '/Farmland-Ownership.jpg', filename: 'lodge_exterior_12.webp' }
-      ]
+      amenities: ['water', 'fencing'],
+      status: 'published',
+      images: [{ url: '/Farmland-Ownership.jpg' }]
     },
-
-    /* ----------- NEW PROPERTIES (8) ----------- */
 
     {
       title: 'Palm Grove Retreat',
-      description: 'Well-maintained farmland with mature coconut trees and internal pathways.',
+      description: 'Coconut plantation with internal roads and electricity.',
       price: 9800000,
       area: 3,
       unit: 'acre',
-      address: 'Coastal Belt Road, Block A',
+      address: 'Coastal Belt Road, Udupi',
+      location: {
+        type: 'Point',
+        coordinates: [74.742142, 13.340881] // [lng, lat] - Udupi [web:8]
+      },
       listingType: ['featured', 'upcoming'],
-      tags: ['coconut', 'coastal'],
+      tags: ['coconut'],
       amenities: ['water', 'electricity', 'road'],
-      images: [{ url: '/Farmland-Ownership.jpg', filename: 'Farmland-Ownership.jpg' }]
+      status: 'published',
+      images: [{ url: '/Farmland-Ownership.jpg' }]
     },
 
     {
       title: 'Meadow View Acres',
-      description: 'Open farmland suitable for organic vegetables and dairy integration.',
+      description: 'Open farmland ideal for organic vegetables and dairy.',
       price: 7200000,
       area: 2,
       unit: 'acre',
-      address: 'Meadow Layout, Village West',
+      address: 'Meadow Layout, Hassan',
+      location: {
+        type: 'Point',
+        coordinates: [76.102898, 13.009711] // [lng, lat] - Hassan [web:17]
+      },
       listingType: ['upcoming'],
-      tags: ['organic', 'open-land'],
+      tags: ['organic'],
       amenities: ['water', 'road'],
-      images: [{ url: '/Farmland-Ownership.jpg', filename: 'Farmland-Ownership.jpg' }]
+      status: 'published',
+      images: [{ url: '/Farmland-Ownership.jpg' }]
     },
 
     {
       title: 'Forest Edge Plantation',
-      description: 'Lush green farmland bordering a reserve forest with natural water flow.',
+      description: 'Plantation land bordering reserve forest with natural water flow.',
       price: 14500000,
       area: 5,
       unit: 'acre',
-      address: 'Forest Border Zone, Taluk 9',
+      address: 'Forest Border Zone, Kadapa',
+      location: {
+        type: 'Point',
+        coordinates: [78.822, 14.475] // [lng, lat] - Kadapa district [web:18]
+      },
       listingType: ['featured', 'trending'],
-      tags: ['plantation', 'forest-edge'],
+      tags: ['plantation'],
       amenities: ['water', 'fencing'],
-      images: [{ url: '/Farmland-Ownership.jpg', filename: 'Farmland-Ownership.jpg' }]
+      status: 'published',
+      images: [{ url: '/Farmland-Ownership.jpg' }]
     },
 
     {
       title: 'Sunrise Valley Farm',
-      description: 'East-facing farmland with excellent sunlight and motorable access.',
+      description: 'East-facing farmland with motorable road access.',
       price: 8900000,
       area: 2.8,
       unit: 'acre',
-      address: 'Sunrise Valley Road',
+      address: 'Sunrise Valley Road, Tumkur',
+      location: {
+        type: 'Point',
+        coordinates: [77.1022, 13.3414] // [lng, lat] - Tumkur [web:19]
+      },
       listingType: ['trending'],
-      tags: ['sunlight', 'road-access'],
-      amenities: ['water', 'electricity'],
-      images: [{ url: '/Farmland-Ownership.jpg', filename: 'Farmland-Ownership.jpg' }]
+      tags: ['road-access'],
+      amenities: ['water', 'electricity', 'road'],
+      status: 'published',
+      images: [{ url: '/Farmland-Ownership.jpg' }]
     },
 
     {
       title: 'Canal Side Holdings',
-      description: 'Productive land adjacent to an irrigation canal with year-round water.',
+      description: 'Productive farmland adjacent to an irrigation canal.',
       price: 11000000,
       area: 3.5,
       unit: 'acre',
-      address: 'Canal Bank, Sector C',
+      address: 'Canal Bank, Kurnool',
+      location: {
+        type: 'Point',
+        coordinates: [78.0498, 15.824] // [lng, lat] - Kurnool-Cuddapah Canal [web:12][web:32]
+      },
       listingType: ['featured'],
-      tags: ['canal', 'irrigated'],
+      tags: ['irrigated'],
       amenities: ['water', 'road'],
-      images: [{ url: '/Farmland-Ownership.jpg', filename: 'Farmland-Ownership.jpg' }]
+      status: 'published',
+      images: [{ url: '/Farmland-Ownership.jpg' }]
     },
 
     {
       title: 'Highland Organic Plot',
-      description: 'Chemical-free farmland ideal for certified organic farming.',
+      description: 'Chemical-free land suitable for certified organic farming.',
       price: 7600000,
       area: 2.2,
       unit: 'acre',
-      address: 'Highland Region, Plot 18',
+      address: 'Highland Region, Chamarajanagar',
+      location: {
+        type: 'Point',
+        coordinates: [76.943733, 11.926147] // [lng, lat] - Chamarajanagar [web:31]
+      },
       listingType: ['upcoming', 'trending'],
       tags: ['organic'],
       amenities: ['water'],
-      images: [{ url: '/Farmland-Ownership.jpg', filename: 'Farmland-Ownership.jpg' }]
+      status: 'published',
+      images: [{ url: '/Farmland-Ownership.jpg' }]
     },
 
     {
       title: 'River Bend Estates',
-      description: 'Premium farmland located near a natural river bend.',
+      description: 'Premium farmland near a natural river bend.',
       price: 16000000,
       area: 4.8,
       unit: 'acre',
-      address: 'River Bend Road',
+      address: 'River Bend Road, Srirangapatna',
+      location: {
+        type: 'Point',
+        coordinates: [76.704, 12.414] // [lng, lat] - Srirangapatna [web:21]
+      },
       listingType: ['featured'],
       tags: ['river', 'premium'],
       amenities: ['water', 'electricity', 'road'],
-      images: [{ url: '/Farmland-Ownership.jpg', filename: 'Farmland-Ownership.jpg' }]
+      status: 'published',
+      images: [{ url: '/Farmland-Ownership.jpg' }]
     },
 
     {
       title: 'Village Core Farmland',
-      description: 'Easily accessible farmland located within village limits.',
+      description: 'Accessible farmland located within village limits.',
       price: 6800000,
       area: 1.8,
       unit: 'acre',
-      address: 'Main Village Street',
+      address: 'Main Village Street, Ramanagara',
+      location: {
+        type: 'Point',
+        coordinates: [77.28176, 12.72031] // [lng, lat] - Ramanagara [web:26]
+      },
       listingType: ['trending', 'upcoming'],
-      tags: ['village', 'accessible'],
+      tags: ['village'],
       amenities: ['water', 'electricity', 'road'],
-      images: [{ url: '/Farmland-Ownership.jpg', filename: 'Farmland-Ownership.jpg' }]
+      status: 'published',
+      images: [{ url: '/Farmland-Ownership.jpg' }]
     }
   ],
 

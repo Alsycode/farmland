@@ -31,11 +31,10 @@ export default function TestimonialCarousel() {
   return (
     <section className="py-24">
       <div className="max-w-6xl mx-auto px-4 text-center">
-        <h2 className="text-4xl font-bold">What our customers say</h2>
-        <p className="text-green-700 mt-3">
+        <h2 className="text-4xl font-bold text-[#2C2C2C]">What our customers say</h2>
+        <p className="text-[#98B4A4] mt-3">
           Trusted by hundreds of farmland investors
         </p>
-
         <div className="relative mt-16 flex justify-center items-center">
           <div className="flex gap-6">
             {testimonials.map((t, i) => (
@@ -43,42 +42,39 @@ export default function TestimonialCarousel() {
                 key={t.id}
                 className={`
                   max-w-md p-8 rounded-3xl
-                  bg-[#eef4ee]
-                  shadow-[6px_6px_12px_#cfd8cf,-6px_-6px_12px_#ffffff]
+                  bg-[#F8F5F0]
+                  shadow-[6px_6px_12px_#d0c7c0,-6px_-6px_12px_#fff6f0]
                   transition-all
                   ${i === current ? 'scale-100' : 'scale-95 opacity-50'}
                 `}
               >
-                <p className="text-green-800">{t.quote}</p>
-
+                <p className="text-[#2C2C2C]">{t.quote}</p>
                 <div className="flex items-center gap-3 mt-6">
                   <img src={t.avatar} className="w-10 h-10 rounded-full" />
                   <div className="text-left">
                     <div className="font-semibold">{t.name}</div>
-                    <div className="text-sm text-green-700">{t.role}</div>
+                    <div className="text-sm text-[#98B4A4]">{t.role}</div>
                   </div>
                 </div>
               </div>
             ))}
           </div>
-
           <button
             onClick={() => setCurrent(c => (c === 0 ? testimonials.length - 1 : c - 1))}
             className="
               absolute left-0 p-2 rounded-full
-              bg-[#eef4ee]
-              shadow-[3px_3px_6px_#cfd8cf,-3px_-3px_6px_#ffffff]
+              bg-[#F8F5F0]
+              shadow-[3px_3px_6px_#d0c7c0,-3px_-3px_6px_#fff6f0]
             "
           >
             <ChevronLeft />
           </button>
-
           <button
             onClick={() => setCurrent(c => (c === testimonials.length - 1 ? 0 : c + 1))}
             className="
               absolute right-0 p-2 rounded-full
-              bg-[#eef4ee]
-              shadow-[3px_3px_6px_#cfd8cf,-3px_-3px_6px_#ffffff]
+              bg-[#F8F5F0]
+              shadow-[3px_3px_6px_#d0c7c0,-3px_-3px_6px_#fff6f0]
             "
           >
             <ChevronRight />

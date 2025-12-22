@@ -1,13 +1,30 @@
+// path: src/components/PropertyCard.jsx
 import React from "react";
 import { Link } from "react-router-dom";
+import { motion } from "framer-motion";
 import { Heart, Building2, MapPin } from "lucide-react";
+
+/* ================= CARD REVEAL ================= */
+
+const cardReveal = {
+  hidden: { y: 32, opacity: 0 },
+  visible: {
+    y: 0,
+    opacity: 1,
+    transition: {
+      duration: 0.55,
+      ease: [0.22, 1, 0.36, 1]
+    }
+  }
+};
 
 export default function PropertyCard({ property }) {
   const image =
     property.images?.[0]?.url || "/Farmland-Ownership.jpg";
 
   return (
-    <div
+    <motion.div
+      variants={cardReveal}
       className="
         bg-[#eef4ee] rounded-3xl overflow-hidden
         shadow-[8px_8px_16px_#cfd8cf,-8px_-8px_16px_#ffffff]
@@ -50,20 +67,17 @@ export default function PropertyCard({ property }) {
 
       {/* ================= CONTENT ================= */}
       <div className="p-5 space-y-3">
-        {/* Title */}
         <h3 className="text-lg font-bold text-green-900 leading-snug">
           <Link to={`/properties/${property._id}`}>
             {property.title}
           </Link>
         </h3>
 
-        {/* Location */}
         <div className="flex items-start gap-2 text-sm text-green-700">
           <MapPin size={16} className="mt-0.5" />
           <span>{property.address}</span>
         </div>
 
-        {/* Developer */}
         {property.developer && (
           <div className="flex items-center gap-2 text-sm text-green-700">
             <Building2 size={16} />
@@ -71,7 +85,6 @@ export default function PropertyCard({ property }) {
           </div>
         )}
 
-        {/* Price */}
         <div className="pt-2">
           <div className="text-2xl font-bold text-green-900">
             ₹{formatPrice(property.price)}
@@ -81,14 +94,13 @@ export default function PropertyCard({ property }) {
           </div>
         </div>
 
-        {/* Project area */}
         {property.area && (
           <div className="flex items-center gap-2 text-sm text-green-700 pt-1">
             🌱 Project Area – {property.area} {property.unit || "Acre"}
           </div>
         )}
       </div>
-    </div>
+    </motion.div>
   );
 }
 

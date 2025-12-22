@@ -41,57 +41,117 @@ export default function PropertyDetail() {
     }
   }
 
-  if (loading) return <div className="text-gray-500">Loading…</div>;
-  if (error) return <div className="text-red-600">{error}</div>;
-  if (!property) return <div className="text-gray-500">Property not found</div>;
+  if (loading) return <div className="text-gray-400 p-6">Loading…</div>;
+  if (error) return <div className="text-red-400 p-6">{error}</div>;
+  if (!property) return <div className="text-gray-400 p-6">Property not found</div>;
 
-  const canEdit = user && (user.role === 'admin' || user.role === 'manager' || user._id === property.owner?._id);
+  const canEdit =
+    user &&
+    (user.role === 'admin' ||
+      user.role === 'manager' ||
+      user._id === property.owner?._id);
+
+  /* ================= neumorphism helpers ================= */
+
+  const card =
+    "bg-[#1e2229] rounded-2xl p-6 " +
+    "shadow-[6px_6px_12px_#14161a,-6px_-6px_12px_#242a32]";
+
+  const inset =
+    "bg-[#1e2229] rounded-xl p-4 " +
+    "shadow-[inset_4px_4px_8px_#14161a,inset_-4px_-4px_8px_#242a32]";
+
+  const actionBtn =
+    "px-4 py-2 rounded-xl text-sm font-medium transition " +
+    "shadow-[4px_4px_8px_#14161a,-4px_-4px_8px_#242a32] active:shadow-[inset_4px_4px_8px_#14161a,inset_-4px_-4px_8px_#242a32]";
 
   return (
-    <div>
-      <div className="flex items-center justify-between mb-4">
+    <div className="text-gray-200 space-y-6">
+      {/* Header */}
+      <div className="flex items-center justify-between">
         <h2 className="text-2xl font-semibold">{property.title}</h2>
-        <div className="flex gap-2">
-          {canEdit && <Link to={`/properties/${id}/edit`} className="px-3 py-2 bg-yellow-500 text-white rounded">Edit</Link>}
-          {canEdit && <button onClick={handleDelete} className="px-3 py-2 bg-red-500 text-white rounded">Delete</button>}
-        </div>
+        {canEdit && (
+          <div className="flex gap-3">
+            <Link
+              to={`/properties/${id}/edit`}
+              className={actionBtn + " text-yellow-400"}
+            >
+              Edit
+            </Link>
+            <button
+              onClick={handleDelete}
+              className={actionBtn + " text-red-400"}
+            >
+              Delete
+            </button>
+          </div>
+        )}
       </div>
 
-      <div className="bg-white p-4 rounded shadow space-y-4">
-        <div className="grid grid-cols-3 gap-4">
-          <div>
-            <div className="text-sm text-gray-500">Price</div>
-            <div className="text-xl font-bold">₹{property.price?.toLocaleString()}</div>
+      {/* Main card */}
+      <div className={card + " space-y-6"}>
+        {/* Stats row */}
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+          <div className={inset}>
+            <div className="text-xs text-gray-400">Price</div>
+            <div className="text-xl font-semibold mt-1">
+              ₹{property.price?.toLocaleString()}
+            </div>
           </div>
-          <div>
-            <div className="text-sm text-gray-500">Area</div>
-            <div>{property.area} {property.unit}</div>
+
+          <div className={inset}>
+            <div className="text-xs text-gray-400">Area</div>
+            <div className="mt-1">
+              {property.area} {property.unit}
+            </div>
           </div>
-          <div>
-            <div className="text-sm text-gray-500">Status</div>
-            <div>{property.status}</div>
+
+          <div className={inset}>
+            <div className="text-xs text-gray-400">Status</div>
+            <div className="mt-1">{property.status}</div>
           </div>
         </div>
 
-        <div>
-          <div className="text-sm text-gray-500">Address</div>
+        {/* Address */}
+        <div className={inset}>
+          <div className="text-xs text-gray-400 mb-1">Address</div>
           <div>{property.address}</div>
         </div>
 
-        <div>
-          <div className="text-sm text-gray-500">Description</div>
-          <div className="whitespace-pre-line">{property.description}</div>
+        {/* Description */}
+        <div className={inset}>
+          <div className="text-xs text-gray-400 mb-1">Description</div>
+          <div className="whitespace-pre-line text-sm leading-relaxed">
+            {property.description}
+          </div>
         </div>
 
+        {/* Images */}
         <div>
-          <div className="text-sm text-gray-500 mb-2">Images</div>
-          <div className="flex gap-3 flex-wrap">
-            {property.images && property.images.length ? property.images.map((img, i) => (
-              <div key={i} className="w-48 border rounded overflow-hidden">
-                <img src={img.url} alt={img.filename} className="w-full h-32 object-cover" />
-                <div className="p-2 text-xs">{img.filename}</div>
-              </div>
-            )) : <div className="text-gray-500">No images</div>}
+          <div className="text-sm text-gray-400 mb-3">Images</div>
+          <div className="flex gap-4 flex-wrap">
+            {property.images && property.images.length ? (
+              property.images.map((img, i) => (
+                <div
+                  key={i}
+                  className={
+                    "w-48 rounded-xl overflow-hidden " +
+                    "shadow-[4px_4px_8px_#14161a,-4px_-4px_8px_#242a32]"
+                  }
+                >
+                  <img
+                    src={img.url}
+                    alt={img.filename}
+                    className="w-full h-32 object-cover"
+                  />
+                  <div className="p-2 text-xs text-gray-400">
+                    {img.filename}
+                  </div>
+                </div>
+              ))
+            ) : (
+              <div className="text-gray-500 text-sm">No images</div>
+            )}
           </div>
         </div>
       </div>

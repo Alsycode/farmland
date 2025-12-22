@@ -96,55 +96,152 @@ exports.getProperty = async (req, res, next) => {
  *  - owner
  *  - sort (e.g., price:asc, price:desc, createdAt:desc)
  */
+// exports.listProperties = async (req, res, next) => {
+//   try {
+//     const {
+//       page = 1,
+//       limit = 12,
+//       q,
+//       minPrice,
+//       maxPrice,
+//       status,
+//       tags,
+//       owner,
+//       sort = 'createdAt:desc'
+//     } = req.query;
+
+//     const filters = {};
+//     if (q) {
+//       filters.$text = { $search: q };
+//     }
+//     if (minPrice) filters.price = { ...filters.price, $gte: Number(minPrice) };
+//     if (maxPrice) filters.price = { ...filters.price, $lte: Number(maxPrice) };
+//     if (status) filters.status = status;
+//     if (tags) filters.tags = { $in: tags.split(',').map(t => t.trim()) };
+//     if (owner) filters.owner = owner;
+
+//     // parse sort
+//     const [sortField, sortOrder] = sort.split(':');
+//     const sortObj = {};
+//     sortObj[sortField || 'createdAt'] = sortOrder === 'asc' ? 1 : -1;
+
+//     const pageNum = Math.max(Number(page) || 1, 1);
+//     const perPage = Math.min(Number(limit) || 12, 100);
+
+//     const query = Property.find(filters).sort(sortObj).skip((pageNum - 1) * perPage).limit(perPage).populate('owner', 'name email');
+
+//     const [items, total] = await Promise.all([
+//       query.exec(),
+//       Property.countDocuments(filters)
+//     ]);
+// console.log("itemsssss",items)
+//     return res.json({
+//       ok: true,
+//       meta: { page: pageNum, perPage, total, totalPages: Math.ceil(total / perPage) },
+//       items
+//     });
+//   } catch (err) {
+//     return next(err);
+//   }
+// };
 exports.listProperties = async (req, res, next) => {
   try {
     const {
       page = 1,
       limit = 12,
       q,
+      listingType,
+      amenities,
       minPrice,
       maxPrice,
-      status,
-      tags,
-      owner,
+      minArea,
+      maxArea,
+      location,
       sort = 'createdAt:desc'
     } = req.query;
 
-    const filters = {};
-    if (q) {
-      filters.$text = { $search: q };
+    /* ================= BASE FILTER ================= */
+    const filters = {
+      status: 'published'
+    };
+
+    /* ================= TEXT SEARCH ================= */
+    const searchTerms = [];
+    if (q) searchTerms.push(q);
+    if (location) searchTerms.push(location);
+
+    if (searchTerms.length) {
+      filters.$text = { $search: searchTerms.join(' ') };
     }
-    if (minPrice) filters.price = { ...filters.price, $gte: Number(minPrice) };
-    if (maxPrice) filters.price = { ...filters.price, $lte: Number(maxPrice) };
-    if (status) filters.status = status;
-    if (tags) filters.tags = { $in: tags.split(',').map(t => t.trim()) };
-    if (owner) filters.owner = owner;
 
-    // parse sort
+    /* ================= LISTING TYPE ================= */
+    if (listingType) {
+      const types = Array.isArray(listingType)
+        ? listingType
+        : String(listingType).split(',');
+
+      filters.listingType = { $in: types };
+    }
+
+    /* ================= AMENITIES ================= */
+    if (amenities) {
+      const list = Array.isArray(amenities)
+        ? amenities
+        : String(amenities).split(',');
+
+      filters.amenities = { $all: list };
+    }
+
+    /* ================= PRICE RANGE ================= */
+    if (minPrice || maxPrice) {
+      filters.price = {};
+      if (minPrice) filters.price.$gte = Number(minPrice);
+      if (maxPrice) filters.price.$lte = Number(maxPrice);
+    }
+
+    /* ================= AREA RANGE ================= */
+    if (minArea || maxArea) {
+      filters.area = {};
+      if (minArea) filters.area.$gte = Number(minArea);
+      if (maxArea) filters.area.$lte = Number(maxArea);
+    }
+
+    /* ================= SORT ================= */
     const [sortField, sortOrder] = sort.split(':');
-    const sortObj = {};
-    sortObj[sortField || 'createdAt'] = sortOrder === 'asc' ? 1 : -1;
+    const sortObj = {
+      [sortField || 'createdAt']: sortOrder === 'asc' ? 1 : -1
+    };
 
+    /* ================= PAGINATION ================= */
     const pageNum = Math.max(Number(page) || 1, 1);
     const perPage = Math.min(Number(limit) || 12, 100);
+    const skip = (pageNum - 1) * perPage;
 
-    const query = Property.find(filters).sort(sortObj).skip((pageNum - 1) * perPage).limit(perPage).populate('owner', 'name email');
+    const query = Property.find(filters)
+      .sort(sortObj)
+      .skip(skip)
+      .limit(perPage)
+      .populate('owner', 'name email');
 
     const [items, total] = await Promise.all([
       query.exec(),
       Property.countDocuments(filters)
     ]);
-console.log("itemsssss",items)
+
     return res.json({
       ok: true,
-      meta: { page: pageNum, perPage, total, totalPages: Math.ceil(total / perPage) },
+      meta: {
+        page: pageNum,
+        perPage,
+        total,
+        totalPages: Math.ceil(total / perPage)
+      },
       items
     });
   } catch (err) {
     return next(err);
   }
 };
-
 /**
  * Update property by id.
  * - Only owner, manager, or admin can update. (Enforced by route RBAC)

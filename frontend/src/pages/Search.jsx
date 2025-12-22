@@ -1,3 +1,4 @@
+// path: src/pages/Search.jsx
 import React, { useEffect, useState } from 'react';
 import propertyService from '../services/propertyService';
 import SearchForm from '../components/SearchForm';
@@ -17,24 +18,36 @@ export default function Search() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
+  /* ================= FIXED PARAM BUILDER ================= */
+
   function buildParams() {
     const params = { page, limit };
+
     if (q) params.q = q;
-    Object.entries(filters).forEach(([k, v]) => v && (params[k] = v));
+
+    Object.entries(filters).forEach(([key, value]) => {
+      if (!value) return;
+
+      // 🔑 CRITICAL FIX: serialize arrays
+      if (Array.isArray(value)) {
+        if (value.length) params[key] = value.join(',');
+      } else {
+        params[key] = value;
+      }
+    });
+
     return params;
   }
 
-  useEffect(() => {
-    fetchList();
-    // eslint-disable-next-line
-  }, [page, filters, q]);
+  /* ================= FETCH ================= */
 
   async function fetchList() {
     setLoading(true);
     setError(null);
+
     try {
       const res = await propertyService.list(buildParams());
-      setItems(res.items || res.data || []);
+      setItems(res.items || []);
       setMeta(res.meta || meta);
     } catch (err) {
       setError(err?.message || 'Failed to load properties');
@@ -43,6 +56,11 @@ export default function Search() {
     }
   }
 
+  useEffect(() => {
+    fetchList();
+    // eslint-disable-next-line
+  }, [page, filters, q]);
+
   return (
     <div className="bg-[#eef4ee] min-h-screen">
       <div className="max-w-7xl mx-auto px-4 py-10 grid grid-cols-1 lg:grid-cols-4 gap-8">
@@ -50,16 +68,28 @@ export default function Search() {
         {/* FILTERS */}
         <div>
           <FiltersSidebar
-            onApply={(f) => { setFilters(f); setPage(1); }}
-            onReset={() => { setFilters({}); setPage(1); }}
             initialFilters={filters}
+            onApply={(f) => {
+              setFilters(f);
+              setPage(1);
+            }}
+            onReset={() => {
+              setFilters({});
+              setPage(1);
+            }}
           />
         </div>
 
         {/* RESULTS */}
         <div className="lg:col-span-3 space-y-6">
           <div className="flex flex-wrap gap-4 items-center justify-between">
-            <SearchForm initialQuery={q} onSearch={(v) => { setQ(v); setPage(1); }} />
+            <SearchForm
+              initialQuery={q}
+              onSearch={(v) => {
+                setQ(v);
+                setPage(1);
+              }}
+            />
 
             <div className="flex gap-2">
               {['grid', 'list'].map(v => (
@@ -93,6 +123,7 @@ export default function Search() {
             ) : (
               <>
                 <PropertyList items={items} view={view} />
+
                 <div className="mt-6 flex justify-between items-center text-sm text-green-700">
                   <span>
                     Page {meta.page} of {meta.totalPages} — {meta.total} results

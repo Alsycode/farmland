@@ -18,8 +18,8 @@ export default function PropertyForm() {
   const [status, setStatus] = useState('draft');
   const [tags, setTags] = useState('');
   const [amenities, setAmenities] = useState('');
-  const [existingImages, setExistingImages] = useState([]); // images already on server
-  const [newImages, setNewImages] = useState([]); // File objects
+  const [existingImages, setExistingImages] = useState([]);
+  const [newImages, setNewImages] = useState([]);
   const fileRef = useRef();
 
   const [loading, setLoading] = useState(false);
@@ -59,7 +59,6 @@ export default function PropertyForm() {
   function onSelectFiles(e) {
     const files = Array.from(e.target.files || []);
     setNewImages((s) => [...s, ...files]);
-    // reset file input
     fileRef.current.value = '';
   }
 
@@ -69,9 +68,6 @@ export default function PropertyForm() {
 
   function removeExistingImageAt(idx) {
     setExistingImages((s) => s.filter((_, i) => i !== idx));
-    // Note: this only removes from UI; actual deletion requires calling property image delete route:
-    // DELETE /api/properties/:id/images/:filename
-    // We'll call that when saving if required (but backend supports direct DELETE endpoint).
   }
 
   async function submit(e) {
@@ -90,21 +86,14 @@ export default function PropertyForm() {
       fd.append('status', status);
       fd.append('tags', tags);
       fd.append('amenities', amenities);
-
-      // append new images
       newImages.forEach((file) => fd.append('images', file));
 
-      // send location fields, metadata etc as needed
-      let res;
-      if (isEdit) {
-        res = await propertyService.update(id, fd);
-      } else {
-        res = await propertyService.create(fd);
-      }
+      const res = isEdit
+        ? await propertyService.update(id, fd)
+        : await propertyService.create(fd);
 
       if (res.ok) {
-        // navigate to detail page for created/updated property
-        const propId = res.property?._id || (res.property && res.property._id) || (isEdit ? id : null);
+        const propId = res.property?._id || (isEdit ? id : null);
         navigate(propId ? `/properties/${propId}` : '/properties');
       } else {
         setError(res.error || 'Save failed');
@@ -116,85 +105,175 @@ export default function PropertyForm() {
     }
   }
 
+  /* ================= neumorphism helpers ================= */
+
+  const card =
+    "bg-[#1e2229] rounded-2xl p-6 " +
+    "shadow-[6px_6px_12px_#14161a,-6px_-6px_12px_#242a32]";
+
+  const inset =
+    "bg-[#1e2229] rounded-xl px-4 py-3 text-gray-200 " +
+    "shadow-[inset_4px_4px_8px_#14161a,inset_-4px_-4px_8px_#242a32] " +
+    "focus:outline-none";
+
+  const label = "text-xs text-gray-400 mb-1 block";
+
+  const actionBtn =
+    "px-4 py-2 rounded-xl text-sm font-medium transition " +
+    "shadow-[4px_4px_8px_#14161a,-4px_-4px_8px_#242a32] " +
+    "active:shadow-[inset_4px_4px_8px_#14161a,inset_-4px_-4px_8px_#242a32]";
+
   return (
-    <div>
-      <h2 className="text-2xl mb-4">{isEdit ? 'Edit Property' : 'Create Property'}</h2>
+    <div className="text-gray-200 space-y-6">
+      <h2 className="text-2xl font-semibold">
+        {isEdit ? 'Edit Property' : 'Create Property'}
+      </h2>
 
-      <form onSubmit={submit} className="bg-white p-4 rounded shadow space-y-4">
+      <form onSubmit={submit} className={card + " space-y-6"}>
+        {/* Title */}
         <div>
-          <label className="text-sm block mb-1">Title</label>
-          <input value={title} onChange={(e) => setTitle(e.target.value)} className="w-full border rounded px-3 py-2" required />
+          <label className={label}>Title</label>
+          <input
+            value={title}
+            onChange={(e) => setTitle(e.target.value)}
+            className={inset + " w-full"}
+            required
+          />
         </div>
 
+        {/* Description */}
         <div>
-          <label className="text-sm block mb-1">Description</label>
-          <textarea value={description} onChange={(e) => setDescription(e.target.value)} className="w-full border rounded px-3 py-2" rows={6} required />
+          <label className={label}>Description</label>
+          <textarea
+            value={description}
+            onChange={(e) => setDescription(e.target.value)}
+            rows={6}
+            className={inset + " w-full resize-none"}
+            required
+          />
         </div>
 
-        <div className="grid grid-cols-3 gap-4">
+        {/* Price / Area / Unit */}
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
           <div>
-            <label className="text-sm block mb-1">Price (INR)</label>
-            <input value={price} onChange={(e) => setPrice(e.target.value)} className="w-full border rounded px-3 py-2" type="number" required />
+            <label className={label}>Price (INR)</label>
+            <input
+              type="number"
+              value={price}
+              onChange={(e) => setPrice(e.target.value)}
+              className={inset + " w-full"}
+              required
+            />
           </div>
           <div>
-            <label className="text-sm block mb-1">Area</label>
-            <input value={area} onChange={(e) => setArea(e.target.value)} className="w-full border rounded px-3 py-2" type="number" />
+            <label className={label}>Area</label>
+            <input
+              type="number"
+              value={area}
+              onChange={(e) => setArea(e.target.value)}
+              className={inset + " w-full"}
+            />
           </div>
           <div>
-            <label className="text-sm block mb-1">Unit</label>
-            <input value={unit} onChange={(e) => setUnit(e.target.value)} className="w-full border rounded px-3 py-2" />
+            <label className={label}>Unit</label>
+            <input
+              value={unit}
+              onChange={(e) => setUnit(e.target.value)}
+              className={inset + " w-full"}
+            />
           </div>
         </div>
 
+        {/* Address */}
         <div>
-          <label className="text-sm block mb-1">Address</label>
-          <input value={address} onChange={(e) => setAddress(e.target.value)} className="w-full border rounded px-3 py-2" />
+          <label className={label}>Address</label>
+          <input
+            value={address}
+            onChange={(e) => setAddress(e.target.value)}
+            className={inset + " w-full"}
+          />
         </div>
 
-        <div className="grid grid-cols-3 gap-4">
+        {/* Status / Tags / Amenities */}
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
           <div>
-            <label className="text-sm block mb-1">Status</label>
-            <select value={status} onChange={(e) => setStatus(e.target.value)} className="w-full border rounded px-3 py-2">
+            <label className={label}>Status</label>
+            <select
+              value={status}
+              onChange={(e) => setStatus(e.target.value)}
+              className={inset + " w-full"}
+            >
               <option value="draft">Draft</option>
               <option value="published">Published</option>
               <option value="archived">Archived</option>
             </select>
           </div>
           <div>
-            <label className="text-sm block mb-1">Tags (comma separated)</label>
-            <input value={tags} onChange={(e) => setTags(e.target.value)} className="w-full border rounded px-3 py-2" />
+            <label className={label}>Tags</label>
+            <input
+              value={tags}
+              onChange={(e) => setTags(e.target.value)}
+              className={inset + " w-full"}
+            />
           </div>
           <div>
-            <label className="text-sm block mb-1">Amenities (comma separated)</label>
-            <input value={amenities} onChange={(e) => setAmenities(e.target.value)} className="w-full border rounded px-3 py-2" />
+            <label className={label}>Amenities</label>
+            <input
+              value={amenities}
+              onChange={(e) => setAmenities(e.target.value)}
+              className={inset + " w-full"}
+            />
           </div>
         </div>
 
+        {/* Existing images */}
         <div>
-          <label className="text-sm block mb-1">Existing images</label>
+          <label className={label}>Existing images</label>
           {existingImages.length ? (
             <ImagePreviewList images={existingImages} onRemove={removeExistingImageAt} />
           ) : (
-            <div className="text-gray-500">No existing images</div>
+            <div className="text-gray-500 text-sm">No existing images</div>
           )}
         </div>
 
+        {/* New images */}
         <div>
-          <label className="text-sm block mb-1">Add images</label>
-          <input ref={fileRef} type="file" accept="image/*" multiple onChange={onSelectFiles} className="block" />
+          <label className={label}>Add images</label>
+          <input
+            ref={fileRef}
+            type="file"
+            accept="image/*"
+            multiple
+            onChange={onSelectFiles}
+            className="text-sm text-gray-400"
+          />
           {newImages.length > 0 && (
-            <>
-              <div className="mt-2 text-sm text-gray-600">New images (will be uploaded on save)</div>
+            <div className="mt-3">
+              <div className="text-xs text-gray-400 mb-2">
+                New images (uploaded on save)
+              </div>
               <ImagePreviewList images={newImages} onRemove={removeNewImageAt} />
-            </>
+            </div>
           )}
         </div>
 
-        {error && <div className="text-red-600">{error}</div>}
+        {error && <div className="text-red-400 text-sm">{error}</div>}
 
-        <div className="flex gap-2">
-          <button disabled={loading} className="px-4 py-2 bg-indigo-600 text-white rounded">{loading ? 'Saving…' : 'Save'}</button>
-          <button type="button" onClick={() => navigate(-1)} className="px-4 py-2 bg-gray-100 rounded">Cancel</button>
+        {/* Actions */}
+        <div className="flex gap-3 pt-2">
+          <button
+            disabled={loading}
+            className={actionBtn + " text-indigo-400"}
+          >
+            {loading ? 'Saving…' : 'Save'}
+          </button>
+          <button
+            type="button"
+            onClick={() => navigate(-1)}
+            className={actionBtn + " text-gray-300"}
+          >
+            Cancel
+          </button>
         </div>
       </form>
     </div>
