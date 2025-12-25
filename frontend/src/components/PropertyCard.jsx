@@ -7,12 +7,12 @@ import { Heart, Building2, MapPin } from "lucide-react";
 /* ================= CARD REVEAL ================= */
 
 const cardReveal = {
-  hidden: { y: 32, opacity: 0 },
+  hidden: { y: 28, opacity: 0 },
   visible: {
     y: 0,
     opacity: 1,
     transition: {
-      duration: 0.55,
+      duration: 0.45,
       ease: [0.22, 1, 0.36, 1]
     }
   }
@@ -26,77 +26,79 @@ export default function PropertyCard({ property }) {
     <motion.div
       variants={cardReveal}
       className="
-        bg-[#eef4ee] rounded-3xl overflow-hidden
-        shadow-[8px_8px_16px_#cfd8cf,-8px_-8px_16px_#ffffff]
-        transition-transform duration-300 hover:-translate-y-1
+        relative group
+        bg-white rounded-3xl
+        border border-[#e6ece6]
+        transition-all duration-300
+        hover:-translate-y-1
       "
     >
+      {/* Accent border (top-right like reference) */}
+      <span className="absolute top-0 right-0 w-10 h-10 border-t-4 border-r-4 border-[#1f4d46] rounded-tr-3xl pointer-events-none" />
+
       {/* ================= IMAGE ================= */}
-      <div className="relative h-[220px] overflow-hidden">
+      <div className="relative h-[200px] rounded-t-3xl overflow-hidden">
         <img
           src={image}
           alt={property.title}
           className="w-full h-full object-cover"
         />
 
-        {/* Category strip */}
-        <div className="absolute bottom-0 left-0 right-0 bg-black/60 text-white text-sm font-semibold text-center py-1">
-          FARMLAND
-        </div>
-
-        {/* Sponsored badge */}
-        {property.listingType?.includes("featured") && (
-          <span className="absolute top-3 left-3 bg-yellow-400 text-black text-xs font-bold px-3 py-1 rounded-lg">
-            SPONSORED
-          </span>
-        )}
-
         {/* Wishlist */}
         <button
           className="
-            absolute bottom-3 right-3
-            w-10 h-10 rounded-full
-            bg-[#eef4ee]
+            absolute top-3 right-3
+            w-9 h-9 rounded-xl
+            bg-white
             flex items-center justify-center
-            shadow-[4px_4px_8px_#cfd8cf,-4px_-4px_8px_#ffffff]
+            border border-[#e6ece6]
           "
         >
-          <Heart size={18} className="text-gray-600" />
+          <Heart size={16} className="text-[#1f4d46]" />
         </button>
+
+        {/* Featured badge */}
+        {property.listingType?.includes("featured") && (
+          <span className="absolute top-3 left-3 bg-[#1f4d46] text-white text-xs font-medium px-3 py-1 rounded-full">
+            Featured
+          </span>
+        )}
       </div>
 
       {/* ================= CONTENT ================= */}
-      <div className="p-5 space-y-3">
-        <h3 className="text-lg font-bold text-green-900 leading-snug">
+      <div className="p-6 space-y-4">
+        <h3 className="text-lg font-semibold text-[#0f2f2a] leading-snug">
           <Link to={`/properties/${property._id}`}>
             {property.title}
           </Link>
         </h3>
 
-        <div className="flex items-start gap-2 text-sm text-green-700">
-          <MapPin size={16} className="mt-0.5" />
-          <span>{property.address}</span>
+        <div className="space-y-2 text-sm text-[#4b6b63]">
+          <div className="flex items-start gap-2">
+            <MapPin size={16} className="mt-0.5" />
+            <span>{property.address}</span>
+          </div>
+
+          {property.developer && (
+            <div className="flex items-center gap-2">
+              <Building2 size={16} />
+              <span>{property.developer}</span>
+            </div>
+          )}
         </div>
 
-        {property.developer && (
-          <div className="flex items-center gap-2 text-sm text-green-700">
-            <Building2 size={16} />
-            <span>{property.developer}</span>
-          </div>
-        )}
-
-        <div className="pt-2">
-          <div className="text-2xl font-bold text-green-900">
+        <div className="pt-3">
+          <div className="text-2xl font-bold text-[#0f2f2a]">
             ₹{formatPrice(property.price)}
-            <span className="text-sm font-medium text-green-700 ml-1">
-              Onwards
+            <span className="text-sm font-medium text-[#4b6b63] ml-1">
+              onwards
             </span>
           </div>
         </div>
 
         {property.area && (
-          <div className="flex items-center gap-2 text-sm text-green-700 pt-1">
-            🌱 Project Area – {property.area} {property.unit || "Acre"}
+          <div className="pt-1 text-sm text-[#4b6b63]">
+            🌱 Project Area — {property.area} {property.unit || "Acre"}
           </div>
         )}
       </div>

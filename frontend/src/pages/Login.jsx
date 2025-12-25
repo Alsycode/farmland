@@ -13,24 +13,24 @@ export default function Login() {
   const [err, setErr] = useState(null);
   const [loading, setLoading] = useState(false);
 
-  async function submit(e) {
-    e.preventDefault();
-    setErr(null);
-    setLoading(true);
-    try {
-      await login(email, password);
-      navigate(from, { replace: true });
-    } catch (error) {
-      const msg =
-        error?.error ||
-        error?.message ||
-        error?.response?.data?.error ||
-        'Login failed';
-      setErr(msg);
-    } finally {
-      setLoading(false);
-    }
+ async function submit(e) {
+  e.preventDefault();
+  setErr(null);
+  setLoading(true);
+
+  try {
+    await login(email, password);
+    navigate(from, { replace: true });
+  } catch (error) {
+    setErr(
+      error?.error ||
+      error?.message ||
+      'Login failed'
+    );
+  } finally {
+    setLoading(false);
   }
+}
 
   const inputClass = `
     w-full px-4 py-3 rounded-xl text-sm

@@ -1,6 +1,40 @@
 import React, { useEffect, useState } from "react";
+import { motion } from "framer-motion";
 
-/* ================= COUNTER CARD ================= */
+/* ================= MOTION ================= */
+
+const sectionReveal = {
+  hidden: { y: 24, opacity: 0 },
+  visible: {
+    y: 0,
+    opacity: 1,
+    transition: {
+      duration: 0.6,
+      ease: [0.22, 1, 0.36, 1]
+    }
+  }
+};
+
+const stagger = {
+  hidden: {},
+  visible: {
+    transition: { staggerChildren: 0.1 }
+  }
+};
+
+const fadeUp = {
+  hidden: { y: 16, opacity: 0 },
+  visible: {
+    y: 0,
+    opacity: 1,
+    transition: {
+      duration: 0.45,
+      ease: [0.22, 1, 0.36, 1]
+    }
+  }
+};
+
+/* ================= COUNTER ================= */
 
 function Counter({ value, label, duration = 1200 }) {
   const [count, setCount] = useState(0);
@@ -23,22 +57,22 @@ function Counter({ value, label, duration = 1200 }) {
   }, [value, duration]);
 
   return (
-    <div
+    <motion.div
+      variants={fadeUp}
       className="
-        bg-[#eef4ee] rounded-3xl p-8 text-center
-        shadow-[8px_8px_16px_#cfd8cf,-8px_-8px_16px_#ffffff]
-        transition
-        hover:shadow-[inset_4px_4px_8px_#cfd8cf,inset_-4px_-4px_8px_#ffffff]
+        bg-[#f4f7ec]
+        rounded-2xl
+        p-8
+        space-y-2
       "
     >
-      <div className="text-4xl sm:text-5xl font-bold text-green-900">
-        {count.toLocaleString()}+
+      <div className="text-3xl sm:text-4xl font-semibold text-[#5a6f4d]">
+        {count.toLocaleString()}
       </div>
-
-      <div className="mt-2 text-sm sm:text-base font-medium text-green-700">
+      <div className="text-sm text-[#7a8773]">
         {label}
       </div>
-    </div>
+    </motion.div>
   );
 }
 
@@ -46,30 +80,50 @@ function Counter({ value, label, duration = 1200 }) {
 
 export default function StatsCounter() {
   return (
-    <section
-      className="
-        bg-[#eef4ee] rounded-3xl p-10
-        shadow-[10px_10px_20px_#cfd8cf,-10px_-10px_20px_#ffffff]
-      "
+    <motion.section
+      variants={sectionReveal}
+      initial="hidden"
+      whileInView="visible"
+      viewport={{ once: true }}
+      className="space-y-16"
     >
-      {/* HEADER */}
-      <div className="text-center mb-10">
-        <h2 className="text-3xl font-bold text-green-900">
+      {/* Header */}
+      <motion.div
+        variants={stagger}
+        className="text-center max-w-2xl mx-auto space-y-4"
+      >
+        <motion.h2
+          variants={fadeUp}
+          className="text-3xl font-medium"
+        >
           Our Impact So Far
-        </h2>
+        </motion.h2>
 
-        <p className="text-green-700 mt-3 max-w-xl mx-auto">
-          Trusted by landowners, developers, and investors across regions.
-        </p>
-      </div>
+        <motion.p
+          variants={fadeUp}
+          className="text-[#5f6f5f] leading-relaxed"
+        >
+          A growing network of verified landowners, developers, and long-term
+          investors built on trust and transparency.
+        </motion.p>
+      </motion.div>
 
-      {/* STATS GRID */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-        <Counter value={1382} label="Properties" />
+      {/* Counters */}
+      <motion.div
+        variants={stagger}
+        className="
+          grid
+          grid-cols-1
+          sm:grid-cols-2
+          lg:grid-cols-4
+          gap-6
+        "
+      >
+        <Counter value={1382} label="Properties Listed" />
         <Counter value={1109} label="Developers" />
-        <Counter value={1491} label="Inquiries" />
+        <Counter value={1491} label="Inquiries Handled" />
         <Counter value={178} label="Sold Out Properties" />
-      </div>
-    </section>
+      </motion.div>
+    </motion.section>
   );
 }

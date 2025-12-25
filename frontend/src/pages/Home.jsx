@@ -9,9 +9,8 @@ import HomeBlogSlider from "../components/HomeBlogSlider";
 import StatsCounter from "../components/StatsCounter";
 import propertyService from "../services/propertyService";
 
-/* ================= MOTION TOKENS ================= */
+/* ================= MOTION ================= */
 
-// Editorial, restrained reveal
 const containerStagger = {
   hidden: {},
   visible: {
@@ -20,7 +19,7 @@ const containerStagger = {
 };
 
 const fadeUp = {
-  hidden: { y: 32, opacity: 0 },
+  hidden: { y: 24, opacity: 0 },
   visible: {
     y: 0,
     opacity: 1,
@@ -67,89 +66,82 @@ export default function Home() {
   }, []);
 
   return (
-    <div className="bg-[#eef4ee] min-h-screen text-green-900">
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-12 space-y-28">
+    <div className="bg-[#eef2df] text-[#2f3a2f] min-h-screen">
+      <main className="max-w-7xl mx-auto px-6 lg:px-12 py-24 space-y-32">
 
         {/* ================= HERO ================= */}
-        <section className="pt-14 grid grid-cols-1 md:grid-cols-12 gap-10 items-center">
-
-          {/* Text column — staggered, editorial reveal */}
+        <section className="grid grid-cols-1 lg:grid-cols-12 gap-16 items-center">
           <motion.div
-            className="md:col-span-7"
+            className="lg:col-span-6 space-y-8"
             variants={containerStagger}
             initial="hidden"
             whileInView="visible"
-            viewport={{ once: true, margin: "-80px" }}
+            viewport={{ once: true }}
           >
+            <motion.span
+              variants={fadeUp}
+              className="inline-block text-sm tracking-wide text-[#6b7a5e]"
+            >
+              Discover Land
+            </motion.span>
+
             <motion.h1
               variants={fadeUp}
-              className="text-4xl sm:text-5xl lg:text-6xl font-bold leading-tight max-w-xl"
+              className="text-4xl sm:text-5xl lg:text-6xl font-semibold leading-tight"
             >
-              Find the perfect{" "}
-              <span className="text-green-700">farmland</span>
-              <br /> for your future
+              Find farmland
+              <br />
+              <span className="text-[#5a6f4d]">
+                for your future
+              </span>
             </motion.h1>
 
             <motion.p
               variants={fadeUp}
-              className="mt-6 text-green-700 max-w-xl text-lg"
+              className="text-base text-[#5f6f5f] leading-relaxed max-w-lg"
             >
-              Verified farmland listings, direct owners, and transparent
-              property discovery.
+              Verified farmland listings with direct owners, transparent
+              processes, and long-term value in mind.
             </motion.p>
 
-            {/* CTAs animate last — never lead */}
             <motion.div
               variants={fadeUp}
-              className="mt-8 flex flex-wrap gap-4"
+              className="flex gap-6 pt-6"
             >
               <Link
                 to="/search"
                 className="
-                  px-6 py-3 rounded-xl text-white font-semibold
-                  bg-green-600
-                  shadow-[3px_3px_6px_#9fbfa2,-3px_-3px_6px_#dff1e2]
-                  hover:bg-green-700
-                  transition-colors
+                  px-7 py-3 rounded-xl
+                  bg-[#5a6f4d]
+                  text-white
+                  font-medium
+                  hover:bg-[#4f6443]
+                  transition
                 "
               >
-                Search Properties
+                Browse Properties
               </Link>
 
               <Link
                 to="/explore"
                 className="
-                  px-6 py-3 rounded-xl font-semibold
-                  bg-[#eef4ee] text-green-800
-                  shadow-[4px_4px_8px_#cfd8cf,-4px_-4px_8px_#ffffff]
+                  px-7 py-3 rounded-xl
+                  border border-[#c8d2be]
+                  text-[#2f3a2f]
+                  font-medium
+                  hover:bg-[#f4f7ec]
+                  transition
                 "
               >
-                Explore on Map
+                Explore Map
               </Link>
             </motion.div>
           </motion.div>
 
-          {/* Image — single calm reveal, no stagger */}
-          <motion.div
-            className="md:col-span-5"
-            variants={fadeUp}
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true, margin: "-80px" }}
-          >
-            <div
-              className="
-                rounded-3xl overflow-hidden
-                shadow-[8px_8px_16px_#cfd8cf,-8px_-8px_16px_#ffffff]
-              "
-            >
-              <img
-                src="/Farmland-Ownership.jpg"
-                alt="Farmland"
-                className="w-full h-[360px] object-cover"
-              />
-            </div>
-          </motion.div>
+          {/* Visual block (same as About) */}
+          <div className="lg:col-span-6 relative">
+            <div className="rounded-3xl overflow-hidden bg-[#dfe6d2] aspect-[4/3]" />
+          </div>
         </section>
 
         {/* ================= PROPERTY SECTIONS ================= */}
@@ -177,13 +169,11 @@ export default function Home() {
           error={error}
         />
 
-        {/* ================= BLOG ================= */}
+        {/* ================= CONTENT SECTIONS ================= */}
         <HomeBlogSlider />
 
-        {/* ================= TESTIMONIALS ================= */}
         <TestimonialCarousel />
 
-        {/* ================= STATS ================= */}
         <StatsCounter />
 
       </main>

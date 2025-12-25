@@ -103,7 +103,7 @@ module.exports = {
     {
       name: 'Admin User',
       email: 'admin@example.com',
-      password: process.env.SEED_ADMIN_PASSWORD || 'AdminPass123!',
+      password: process.env.SEED_ADMIN_PASSWORD || 's',
       role: 'admin'
     },
     {
@@ -126,204 +126,360 @@ module.exports = {
     }
   ],
 properties: [
-    {
-      title: 'Sunny River Farm',
-      description: SPP_DESCRIPTION_HTML,
-      price: 8500000,
-      area: 2.5,
-      unit: 'acre',
-      address: 'Green Valley, Mandya District, Karnataka',
-      location: {
-        type: 'Point',
-        coordinates: [76.894684, 12.523731] // [lng, lat] - Mandya District [web:1]
-      },
-      listingType: ['featured', 'trending'],
-      tags: ['irrigated', 'organic'],
-      amenities: ['water', 'electricity', 'road', 'fencing'],
-      status: 'published',
-      images: [{ url: '/Farmland-Ownership.jpg', filename: 'Farmland-Ownership.jpg' }]
+  {
+    title: "Sunny River Farm",
+    slug: "sunny-river-farm-mandya",
+
+    description: SPP_DESCRIPTION_HTML,
+
+    price: 8500000,
+    area: 2.5,
+    unit: "acre",
+
+    address: "Green Valley, Mandya District, Karnataka",
+    location: {
+      type: "Point",
+      coordinates: [76.894684, 12.523731]
     },
 
-    {
-      title: 'Green Horizon Estate',
-      description: 'Spacious agricultural land with fertile soil and fenced boundaries.',
-      price: 12500000,
-      area: 4,
-      unit: 'acre',
-      address: 'Hillview Panchayat, Chikkaballapur',
-      location: {
-        type: 'Point',
-        coordinates: [77.730401, 13.42608] // [lng, lat] - Chikkaballapur [web:6]
-      },
-      listingType: ['featured'],
-      tags: ['fertile-soil'],
-      amenities: ['water', 'electricity', 'road', 'fencing'],
-      status: 'published',
-      images: [{ url: '/Farmland-Ownership.jpg' }]
+    listingType: ["featured", "trending"],
+    tags: ["irrigated", "organic"],
+    amenities: ["water", "electricity", "road", "fencing"],
+
+    seoTitle: "2.5 Acre Farmland for Sale in Mandya | Sunny River Farm",
+    seoDescription:
+      "Buy 2.5 acre agricultural farmland in Mandya with water, road access and clear documents. Ideal for organic farming and investment.",
+
+    highlights: [
+      "Clear title & ownership documents",
+      "Motorable road access",
+      "Reliable year-round water source",
+      "Ideal for organic farming & investment"
+    ],
+
+    nearby: [
+      { label: "Mandya Town", distance: "8 km" },
+      { label: "NH-275", distance: "3 km" }
+    ],
+
+    legal: {
+      landType: "Agricultural",
+      documentsClear: true,
+      ownershipHistoryYears: 100
     },
 
-    {
-      title: 'Hillside Orchard',
-      description: 'Established orchard land with natural slope and internal fencing.',
-      price: 12000000,
-      area: 3.2,
-      unit: 'acre',
-      address: 'Hillside Estate, Ananthapur',
-      location: {
-        type: 'Point',
-        coordinates: [77.595406, 14.685564] // [lng, lat] - Anantapur [web:15]
-      },
-      listingType: ['trending'],
-      tags: ['orchard'],
-      amenities: ['water', 'fencing'],
-      status: 'published',
-      images: [{ url: '/Farmland-Ownership.jpg' }]
+    idealFor: ["Farmland Investment", "Organic Farming"],
+
+    status: "published",
+
+    images: [
+      {
+        url: "/Farmland-Ownership.jpg",
+        filename: "Farmland-Ownership.jpg",
+        alt: "Sunny River Farm agricultural land in Mandya"
+      }
+    ]
+  },
+
+  {
+    title: "Green Horizon Estate",
+    slug: "green-horizon-estate-chikkaballapur",
+
+    description:
+      "Spacious agricultural land with fertile soil and fenced boundaries.",
+
+    price: 12500000,
+    area: 4,
+    unit: "acre",
+
+    address: "Hillview Panchayat, Chikkaballapur",
+    location: {
+      type: "Point",
+      coordinates: [77.730401, 13.42608]
     },
 
-    {
-      title: 'Palm Grove Retreat',
-      description: 'Coconut plantation with internal roads and electricity.',
-      price: 9800000,
-      area: 3,
-      unit: 'acre',
-      address: 'Coastal Belt Road, Udupi',
-      location: {
-        type: 'Point',
-        coordinates: [74.742142, 13.340881] // [lng, lat] - Udupi [web:8]
-      },
-      listingType: ['featured', 'upcoming'],
-      tags: ['coconut'],
-      amenities: ['water', 'electricity', 'road'],
-      status: 'published',
-      images: [{ url: '/Farmland-Ownership.jpg' }]
+    listingType: ["featured"],
+    tags: ["fertile-soil"],
+    amenities: ["water", "electricity", "road", "fencing"],
+
+    seoTitle: "4 Acre Agricultural Land for Sale in Chikkaballapur",
+    seoDescription:
+      "Buy 4 acre fertile agricultural land in Chikkaballapur with fencing, water and road access. Suitable for farming and long-term investment.",
+
+    highlights: [
+      "Highly fertile soil",
+      "Fully fenced boundaries",
+      "Electricity available",
+      "Easy road connectivity"
+    ],
+
+    nearby: [
+      { label: "Chikkaballapur Town", distance: "6 km" }
+    ],
+
+    legal: {
+      landType: "Agricultural",
+      documentsClear: true
     },
 
-    {
-      title: 'Meadow View Acres',
-      description: 'Open farmland ideal for organic vegetables and dairy.',
-      price: 7200000,
-      area: 2,
-      unit: 'acre',
-      address: 'Meadow Layout, Hassan',
-      location: {
-        type: 'Point',
-        coordinates: [76.102898, 13.009711] // [lng, lat] - Hassan [web:17]
-      },
-      listingType: ['upcoming'],
-      tags: ['organic'],
-      amenities: ['water', 'road'],
-      status: 'published',
-      images: [{ url: '/Farmland-Ownership.jpg' }]
+    idealFor: ["Farming", "Investment"],
+
+    status: "published",
+
+    images: [
+      {
+        url: "/Farmland-Ownership.jpg",
+        alt: "Green Horizon Estate farmland in Chikkaballapur"
+      }
+    ]
+  },
+
+  {
+    title: "Hillside Orchard",
+    slug: "hillside-orchard-ananthapur",
+
+    description:
+      "Established orchard land with natural slope and internal fencing.",
+
+    price: 12000000,
+    area: 3.2,
+    unit: "acre",
+
+    address: "Hillside Estate, Ananthapur",
+    location: {
+      type: "Point",
+      coordinates: [77.595406, 14.685564]
     },
 
-    {
-      title: 'Forest Edge Plantation',
-      description: 'Plantation land bordering reserve forest with natural water flow.',
-      price: 14500000,
-      area: 5,
-      unit: 'acre',
-      address: 'Forest Border Zone, Kadapa',
-      location: {
-        type: 'Point',
-        coordinates: [78.822, 14.475] // [lng, lat] - Kadapa district [web:18]
-      },
-      listingType: ['featured', 'trending'],
-      tags: ['plantation'],
-      amenities: ['water', 'fencing'],
-      status: 'published',
-      images: [{ url: '/Farmland-Ownership.jpg' }]
+    listingType: ["trending"],
+    tags: ["orchard"],
+    amenities: ["water", "fencing"],
+
+    seoTitle: "3.2 Acre Orchard Land for Sale in Ananthapur",
+    seoDescription:
+      "Purchase 3.2 acre orchard land in Ananthapur with fencing and water access. Ideal for plantation and orchard development.",
+
+    highlights: [
+      "Established orchard land",
+      "Natural slope drainage",
+      "Fenced property",
+      "Peaceful surroundings"
+    ],
+
+    legal: {
+      landType: "Agricultural",
+      documentsClear: true
     },
 
-    {
-      title: 'Sunrise Valley Farm',
-      description: 'East-facing farmland with motorable road access.',
-      price: 8900000,
-      area: 2.8,
-      unit: 'acre',
-      address: 'Sunrise Valley Road, Tumkur',
-      location: {
-        type: 'Point',
-        coordinates: [77.1022, 13.3414] // [lng, lat] - Tumkur [web:19]
-      },
-      listingType: ['trending'],
-      tags: ['road-access'],
-      amenities: ['water', 'electricity', 'road'],
-      status: 'published',
-      images: [{ url: '/Farmland-Ownership.jpg' }]
+    idealFor: ["Orchard Farming", "Plantation"],
+
+    status: "published",
+
+    images: [
+      {
+        url: "/Farmland-Ownership.jpg",
+        alt: "Hillside orchard farmland in Ananthapur"
+      }
+    ]
+  },
+
+  {
+    title: "Palm Grove Retreat",
+    slug: "palm-grove-retreat-udupi",
+
+    description:
+      "Coconut plantation with internal roads and electricity.",
+
+    price: 9800000,
+    area: 3,
+    unit: "acre",
+
+    address: "Coastal Belt Road, Udupi",
+    location: {
+      type: "Point",
+      coordinates: [74.742142, 13.340881]
     },
 
-    {
-      title: 'Canal Side Holdings',
-      description: 'Productive farmland adjacent to an irrigation canal.',
-      price: 11000000,
-      area: 3.5,
-      unit: 'acre',
-      address: 'Canal Bank, Kurnool',
-      location: {
-        type: 'Point',
-        coordinates: [78.0498, 15.824] // [lng, lat] - Kurnool-Cuddapah Canal [web:12][web:32]
-      },
-      listingType: ['featured'],
-      tags: ['irrigated'],
-      amenities: ['water', 'road'],
-      status: 'published',
-      images: [{ url: '/Farmland-Ownership.jpg' }]
+    listingType: ["featured", "upcoming"],
+    tags: ["coconut"],
+    amenities: ["water", "electricity", "road"],
+
+    seoTitle: "3 Acre Coconut Plantation for Sale in Udupi",
+    seoDescription:
+      "Buy 3 acre coconut plantation in Udupi with internal roads, electricity and water supply. Ideal for plantation farming.",
+
+    highlights: [
+      "Established coconut plantation",
+      "Internal road network",
+      "Electricity connection",
+      "Coastal climate advantage"
+    ],
+
+    legal: {
+      landType: "Agricultural",
+      documentsClear: true
     },
 
-    {
-      title: 'Highland Organic Plot',
-      description: 'Chemical-free land suitable for certified organic farming.',
-      price: 7600000,
-      area: 2.2,
-      unit: 'acre',
-      address: 'Highland Region, Chamarajanagar',
-      location: {
-        type: 'Point',
-        coordinates: [76.943733, 11.926147] // [lng, lat] - Chamarajanagar [web:31]
-      },
-      listingType: ['upcoming', 'trending'],
-      tags: ['organic'],
-      amenities: ['water'],
-      status: 'published',
-      images: [{ url: '/Farmland-Ownership.jpg' }]
+    idealFor: ["Plantation Farming", "Investment"],
+
+    status: "published",
+
+    images: [
+      {
+        url: "/Farmland-Ownership.jpg",
+        alt: "Palm Grove Retreat coconut plantation in Udupi"
+      }
+    ]
+  },
+
+  {
+    title: "Meadow View Acres",
+    slug: "meadow-view-acres-hassan",
+
+    description:
+      "Open farmland ideal for organic vegetables and dairy.",
+
+    price: 7200000,
+    area: 2,
+    unit: "acre",
+
+    address: "Meadow Layout, Hassan",
+    location: {
+      type: "Point",
+      coordinates: [76.102898, 13.009711]
     },
 
-    {
-      title: 'River Bend Estates',
-      description: 'Premium farmland near a natural river bend.',
-      price: 16000000,
-      area: 4.8,
-      unit: 'acre',
-      address: 'River Bend Road, Srirangapatna',
-      location: {
-        type: 'Point',
-        coordinates: [76.704, 12.414] // [lng, lat] - Srirangapatna [web:21]
-      },
-      listingType: ['featured'],
-      tags: ['river', 'premium'],
-      amenities: ['water', 'electricity', 'road'],
-      status: 'published',
-      images: [{ url: '/Farmland-Ownership.jpg' }]
+    listingType: ["upcoming"],
+    tags: ["organic"],
+    amenities: ["water", "road"],
+
+    seoTitle: "2 Acre Organic Farmland for Sale in Hassan",
+    seoDescription:
+      "Buy 2 acre organic farmland in Hassan suitable for vegetables and dairy farming with water and road access.",
+
+    highlights: [
+      "Ideal for organic farming",
+      "Open and level land",
+      "Good water availability",
+      "Easy road access"
+    ],
+
+    legal: {
+      landType: "Agricultural",
+      documentsClear: true
     },
 
-    {
-      title: 'Village Core Farmland',
-      description: 'Accessible farmland located within village limits.',
-      price: 6800000,
-      area: 1.8,
-      unit: 'acre',
-      address: 'Main Village Street, Ramanagara',
-      location: {
-        type: 'Point',
-        coordinates: [77.28176, 12.72031] // [lng, lat] - Ramanagara [web:26]
-      },
-      listingType: ['trending', 'upcoming'],
-      tags: ['village'],
-      amenities: ['water', 'electricity', 'road'],
-      status: 'published',
-      images: [{ url: '/Farmland-Ownership.jpg' }]
-    }
-  ],
+    idealFor: ["Organic Farming", "Dairy Farming"],
+
+    status: "published",
+
+    images: [
+      {
+        url: "/Farmland-Ownership.jpg",
+        alt: "Meadow View Acres organic farmland in Hassan"
+      }
+    ]
+  },
+
+  {
+    title: "Forest Edge Plantation",
+    slug: "forest-edge-plantation-kadapa",
+
+    description:
+      "Plantation land bordering reserve forest with natural water flow.",
+
+    price: 14500000,
+    area: 5,
+    unit: "acre",
+
+    address: "Forest Border Zone, Kadapa",
+    location: {
+      type: "Point",
+      coordinates: [78.822, 14.475]
+    },
+
+    listingType: ["featured", "trending"],
+    tags: ["plantation"],
+    amenities: ["water", "fencing"],
+
+    seoTitle: "5 Acre Plantation Land for Sale in Kadapa",
+    seoDescription:
+      "Premium 5 acre plantation land in Kadapa near forest border with natural water flow and fencing.",
+
+    highlights: [
+      "Bordering reserve forest",
+      "Natural water flow",
+      "Large continuous land parcel",
+      "High appreciation potential"
+    ],
+
+    legal: {
+      landType: "Agricultural",
+      documentsClear: true
+    },
+
+    idealFor: ["Plantation", "Long-Term Investment"],
+
+    status: "published",
+
+    images: [
+      {
+        url: "/Farmland-Ownership.jpg",
+        alt: "Forest Edge plantation land in Kadapa"
+      }
+    ]
+  },
+
+  {
+    title: "Village Core Farmland",
+    slug: "village-core-farmland-ramanagara",
+
+    description:
+      "Accessible farmland located within village limits.",
+
+    price: 6800000,
+    area: 1.8,
+    unit: "acre",
+
+    address: "Main Village Street, Ramanagara",
+    location: {
+      type: "Point",
+      coordinates: [77.28176, 12.72031]
+    },
+
+    listingType: ["trending", "upcoming"],
+    tags: ["village"],
+    amenities: ["water", "electricity", "road"],
+
+    seoTitle: "1.8 Acre Farmland for Sale in Ramanagara Village",
+    seoDescription:
+      "Buy 1.8 acre farmland in Ramanagara village with electricity, water and road access. Close to habitation.",
+
+    highlights: [
+      "Located within village limits",
+      "Electricity available",
+      "Motorable road access",
+      "Easy daily maintenance"
+    ],
+
+    legal: {
+      landType: "Agricultural",
+      documentsClear: true
+    },
+
+    idealFor: ["Small Farming", "Weekend Farm"],
+
+    status: "published",
+
+    images: [
+      {
+        url: "/Farmland-Ownership.jpg",
+        alt: "Village core farmland in Ramanagara"
+      }
+    ]
+  }
+],
+
 
 
   bookings: [],
